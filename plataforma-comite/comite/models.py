@@ -12,14 +12,9 @@ class Usuarios(models.Model):
 
 
 class Ingresos(models.Model):
-    OPCIONES_PAGO = [
-        ('efectivo','Efectivo'),
-        ('transaccion','Transanccion'),
-        ('cheque','Cheque'),
-    ]
     nIngreso = models.AutoField(primary_key=True)
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE,null=True)
-    tipo_pago = models.CharField(max_length=20,choices=OPCIONES_PAGO)
+    tipo_pago = models.CharField(max_length=20)
     ciudad = models.CharField(max_length=100,default='San Juan Nepomuceno',editable=False)
     fecha = models.DateTimeField(auto_now_add=True,editable=False)
     valorIngreso = models.IntegerField(default=0,blank=True,null=True)
