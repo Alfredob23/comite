@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %} Comite de Ganaderos {% endblock %}
+
+
+{% block body %}
+
+<div class="row">
+    <div class=" col-sm-12 col-md-6 col-lg4-4 col-xl-4">
+        <h2>Agregar Ingreso</h2>   
+        <div class="card">
+            <div class="card-body">
+                <form action="/registrarIngreso/" method="POST">{% csrf_token %}
+                    
+                    <label for="opciones">Metodo de pago:</label>
+                    <select id="opciones"  class="form-control" name="opciones">
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Transaccion">Transaccion</option>
+                        <option value="Consignacion">Consignacion Bancaria</option>
+                    </select>
+
+                    <div class="form-group">
+                        <label>Valor:</label>
+                        <input  class="form-control" type="text" id="numValor" name="numValor"   maxlength="20" required >
+                    </div>
+
+                    <div>
+                        <label for="opciones1">Concepto:</label>
+                        <select id="opciones1" class="form-control"  name="opciones1">
+                            <option value="Pago Vacunas">Pago Vacunas</option>
+                            <option value="Abono Asociado">Abono Asociado</option>
+                            <option value="Donaciones">Donaciones</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary  w-100 text-white">Guardar</button>
+                    </div>    
+                </form>
+                
+            </div>
+        </div> 
+    </div>
+    <div class=" col-sm-12 col-md-6 col-lg-8 col-xl-8">
+        <h2>Lista de Ingresos</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>nIngreso</th>
+                        <th>Tipo de Pago</th>
+                        <th>Ciudad</th>
+                        <th>Fecha de Registro</th>
+                        <th>Valor Ingreso</th>
+                        <th>Concepto</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for items in ingresos %}
+                    <tr>
+                        <td>{{items.nIngreso}}</td>
+                        <td>{{items.tipo_pago}}</td>
+                        <td>{{items.ciudad}}</td>
+                        <td>{{items.fecha|date:"d/m/Y H:i"}}</td>
+                        <td>{{items.valorIngreso}}</td>
+                        <td>{{items.concepto}}</td>
+                        <td><a href="edicionIngreso/{{items.nIngreso}}" class="btn btn-info">Editar</a></td>
+                        <td><a href="eliminacionIngreso/{{items.nIngreso}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
+                    </tr>
+                    {% endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
