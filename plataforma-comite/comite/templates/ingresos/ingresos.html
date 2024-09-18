@@ -5,15 +5,30 @@
 
 {% block body %}
 
+
 <div class="row">
-    <div class=" col-sm-12 col-md-6 col-lg4-4 col-xl-4">
+    <div class=" col-sm-12 col-md-6 col-lg-4 col-xl-4">
         <h2>Agregar Ingreso</h2>   
         <div class="card">
             <div class="card-body">
                 <form action="/registrarIngreso/" method="POST">{% csrf_token %}
+                    <div class="form-group">
+                        <label>Cedula:</label>
+                        <input  class="form-control" type="text" id="cedula" name="cedula"   maxlength="20" required >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nombre y apellidos:</label>
+                        <input  class="form-control" type="text" id="nombre_completo" name="nombre_completo"   maxlength="100" required >
+                    </div>
                     
-                    <label for="opciones">Metodo de pago:</label>
-                    <select id="opciones"  class="form-control" name="opciones">
+                    <div class="form-group">
+                        <label>Direccion:</label>
+                        <input  class="form-control" type="text" id="direccion" name="direccion"   maxlength="100">
+                    </div>
+
+                    <label for="tipo_pago">Metodo de pago:</label>
+                    <select id="tipo_pago"  class="form-control" name="tipo_pago">
                         <option value="Efectivo">Efectivo</option>
                         <option value="Transaccion">Transaccion</option>
                         <option value="Consignacion">Consignacion Bancaria</option>
@@ -21,12 +36,12 @@
 
                     <div class="form-group">
                         <label>Valor:</label>
-                        <input  class="form-control" type="text" id="numValor" name="numValor"   maxlength="20" required >
+                        <input  class="form-control" type="text" id="valorIngreso" name="valorIngreso"   maxlength="20" required >
                     </div>
 
                     <div>
-                        <label for="opciones1">Concepto:</label>
-                        <select id="opciones1" class="form-control"  name="opciones1">
+                        <label for="concepto">Concepto:</label>
+                        <select id="concepto" class="form-control"  name="concepto">
                             <option value="Pago Vacunas">Pago Vacunas</option>
                             <option value="Abono Asociado">Abono Asociado</option>
                             <option value="Donaciones">Donaciones</option>
@@ -37,7 +52,7 @@
                         <button type="submit" class="btn btn-primary  w-100 text-white">Guardar</button>
                     </div>    
                 </form>
-                
+                              
             </div>
         </div> 
     </div>
