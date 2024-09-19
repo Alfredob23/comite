@@ -36,6 +36,12 @@ def edicionIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     return render(request,"ingresos/edicionIngresos.html",{"ingreso":ingreso})
 
+
+def detalleIngreso(request,nIngreso):
+    ingreso = Ingresos.objects.get(nIngreso=nIngreso)
+    return render(request,"ingresos/detalleIngresos.html",{"ingreso":ingreso})
+
+
 def editarIngreso(request,nIngreso):
     pago = request.POST['tipo_pago']
     valor =request.POST['valorIngreso']

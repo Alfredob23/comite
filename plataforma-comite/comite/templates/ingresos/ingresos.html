@@ -34,7 +34,7 @@
 
                     <div class="form-group">
                         <label>Valor:</label>
-                        <input  class="form-control" type="text" id="valorIngreso" name="valorIngreso"   maxlength="20" required >
+                        <input  class="form-control" type="number" id="valorIngreso" name="valorIngreso"   maxlength="20" required >
                     </div>
 
                     <div>
@@ -79,9 +79,9 @@
                         <td>{{items.fecha|date:"d/m/Y"}}</td>
                         <td>{{items.valorIngreso}}</td>
                         <td>{{items.concepto}}</td>
-                        <td><a href="edicionIngreso/{{items.nIngreso}}" class="btn btn-info">Editar</a></td>
-                        <td><a href="eliminacionIngreso/{{items.nIngreso}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
-                        <td><a href="edicionIngreso/{{items.nIngreso}}" class="btn btn-success">Detalles</a></td>
+                        <td><a href="edicionIngreso/{{items.nIngreso}}" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a></td>
+                        <td><a href="eliminacionIngreso/{{items.nIngreso}}" class="btn btn-danger btnEliminacion"> <i class="fa-solid fa-trash-can"></i></a></td>
+                        <td><a href="detalleIngreso/{{items.nIngreso}}" class="btn btn-success"><i class="fa-solid fa-magnifying-glass"></i></a></td>
 
                     </tr>
                     {% endfor%}
