@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %} Comite de Ganaderos {% endblock %}
-
+{% block title %} Comite de Ganaderos {% endblock %}\
 
 {% block body %}
 
-
 <div class="row">
-    <div class=" col-sm-12 col-md-6 col-lg-4 col-xl-4">
+    <div class=" col-sm-12 col-md-6 col-lg-3 col-xl-3">
         <h2>Agregar Ingreso</h2>   
         <div class="card">
             <div class="card-body">
-                <form action="/registrarIngreso/" method="POST">{% csrf_token %}
+                <form action="/registrarIngreso/" id="registro-form" method="POST">{% csrf_token %}
                     <div class="form-group">
                         <label>Cedula:</label>
                         <input  class="form-control" type="text" id="cedula" name="cedula"   maxlength="20" required >
@@ -24,7 +22,7 @@
                     
                     <div class="form-group">
                         <label>Direccion:</label>
-                        <input  class="form-control" type="text" id="direccion" name="direccion"   maxlength="100">
+                        <input  class="form-control" type="text" id="direccion" name="direccion"   maxlength="100" required>
                     </div>
 
                     <label for="tipo_pago">Metodo de pago:</label>
@@ -52,11 +50,12 @@
                         <button type="submit" class="btn btn-primary  w-100 text-white">Guardar</button>
                     </div>    
                 </form>
+
                               
             </div>
         </div> 
     </div>
-    <div class=" col-sm-12 col-md-6 col-lg-8 col-xl-8">
+    <div class=" col-sm-12 col-md-6 col-lg-9 col-xl-9">
         <h2>Lista de Ingresos</h2>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -64,7 +63,7 @@
                     <tr>
                         <th>nIngreso</th>
                         <th>Tipo de Pago</th>
-                        <th>Ciudad</th>
+                        <th>Nombre</th>
                         <th>Fecha de Registro</th>
                         <th>Valor Ingreso</th>
                         <th>Concepto</th>
@@ -76,12 +75,14 @@
                     <tr>
                         <td>{{items.nIngreso}}</td>
                         <td>{{items.tipo_pago}}</td>
-                        <td>{{items.ciudad}}</td>
-                        <td>{{items.fecha|date:"d/m/Y H:i"}}</td>
+                        <td>{{items.usuario.nombre_completo}}</td>
+                        <td>{{items.fecha|date:"d/m/Y"}}</td>
                         <td>{{items.valorIngreso}}</td>
                         <td>{{items.concepto}}</td>
                         <td><a href="edicionIngreso/{{items.nIngreso}}" class="btn btn-info">Editar</a></td>
                         <td><a href="eliminacionIngreso/{{items.nIngreso}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
+                        <td><a href="edicionIngreso/{{items.nIngreso}}" class="btn btn-success">Detalles</a></td>
+
                     </tr>
                     {% endfor%}
                 </tbody>
@@ -89,5 +90,7 @@
         </div>
     </div>
 </div>
-
+<script type="text/javascript">
+    var verificarCedulaUrl = "{% url 'verificar_cedula' %}";
+</script>
 {% endblock %}

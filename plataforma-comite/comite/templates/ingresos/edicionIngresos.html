@@ -9,8 +9,8 @@
             <div class="card">
                 <div class="card-body">
                     <form action="/editarIngreso/{{ingreso.nIngreso}}/" method="POST">{% csrf_token %}                       
-                        <label for="opciones">Metodo de pago:</label>
-                        <select id="opciones"  class="form-control" name="opciones">
+                        <label for="tipo_pago">Metodo de pago:</label>
+                        <select id="tipo_pago"  class="form-control" name="tipo_pago">
                             <option value="Efectivo" {% if ingreso.tipo_pago == "Efectivo" %}selected{% endif %}>Efectivo</option>
                             <option value="Transaccion" {% if ingreso.tipo_pago == "Transaccion" %}selected{% endif %}>Transaccion</option>
                             <option value="Consignacion" {% if ingreso.tipo_pago == "Consignacion" %}selected{% endif %}>Consignacion</option>
@@ -18,12 +18,12 @@
     
                         <div class="form-group">
                             <label>Valor:</label>
-                            <input  class="form-control" type="text" id="numValor" name="numValor" value= "{{ingreso.valorIngreso}}" maxlength="20" required >
+                            <input  class="form-control" type="text" id="valorIngreso" name="valorIngreso" value= "{{ingreso.valorIngreso}}" maxlength="20" required >
                         </div>
     
                         <div>
-                            <label for="opciones1">Concepto:</label>
-                            <select id="opciones1"  class="form-control"  name="opciones1">
+                            <label for="concepto">Concepto:</label>
+                            <select id="concepto"  class="form-control"  name="concepto">
                                 <option value="Pago Vacunas" {% if ingreso.concepto == "Pago Vacunas" %}selected{% endif %}>Pago Vacunas</option>
                                 <option value="Abono Asociado" {% if ingreso.concepto == "Abono Asociado" %}selected{% endif %}>Abono Asociado</option>
                                 <option value="Donaciones" {% if ingreso.concepto == "Donaciones" %}selected{% endif %}>Donaciones</option>

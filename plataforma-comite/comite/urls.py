@@ -7,5 +7,5 @@ urlpatterns = [
     path('edicionIngreso/<nIngreso>',views.edicionIngreso),
     path('eliminacionIngreso/<nIngreso>',views.eliminacionIngreso),
     path('editarIngreso/<int:nIngreso>/',views.editarIngreso),
-    path('prueba/',views.prueba)
+    path('verificar-cedula/', views.verificar_cedula, name='verificar_cedula')
 ]
