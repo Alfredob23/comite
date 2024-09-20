@@ -1,6 +1,11 @@
+import os
 from django.shortcuts import render,redirect
 from .models import Ingresos,Usuarios
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from io import BytesIO
+
 
 # Create your views here.
 def home(request):
@@ -28,8 +33,6 @@ def registrarIngreso(request):
         return render(request, '/', {'error': 'Todos los campos son requeridos.'})
     return render(request, '/')
 
-
-
 def eliminacionIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     ingreso.delete()
@@ -44,7 +47,6 @@ def detalleIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     return render(request,"ingresos/detalleIngresos.html",{"ingreso":ingreso})
 
-
 def editarIngreso(request,nIngreso):
     pago = request.POST['tipo_pago']
     valor =request.POST['valorIngreso']
@@ -55,6 +57,9 @@ def editarIngreso(request,nIngreso):
     ingreso.concepto = concepto
     ingreso.save()
     return redirect('/')
+
+def generar_ticket(request):
+    pass
 
 def verificar_cedula(request):
     cedula = request.GET.get('cedula', None)

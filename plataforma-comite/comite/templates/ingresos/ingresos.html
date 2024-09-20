@@ -67,7 +67,7 @@
                         <th>Fecha de Registro</th>
                         <th>Valor Ingreso</th>
                         <th>Concepto</th>
-                        <th colspan="2">Opciones</th>
+                        <th colspan="4">Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -82,6 +82,9 @@
                         <td><a href="edicionIngreso/{{items.nIngreso}}" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a></td>
                         <td><a href="eliminacionIngreso/{{items.nIngreso}}" class="btn btn-danger btnEliminacion"> <i class="fa-solid fa-trash-can"></i></a></td>
                         <td><a href="detalleIngreso/{{items.nIngreso}}" class="btn btn-success"><i class="fa-solid fa-magnifying-glass"></i></a></td>
+                        <td><a href="detalleIngreso/{{items.nIngreso}}" class="btn btn-light"><i class="fa-solid fa-file-pdf"></i></i></a></td>
+
+                        
 
                     </tr>
                     {% endfor%}
