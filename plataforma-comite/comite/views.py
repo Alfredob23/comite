@@ -2,9 +2,6 @@ import os
 from django.shortcuts import render,redirect
 from .models import Ingresos,Usuarios
 from django.http import JsonResponse,HttpResponse
-from django.template.loader import get_template
-from xhtml2pdf import pisa
-from io import BytesIO
 
 
 # Create your views here.
