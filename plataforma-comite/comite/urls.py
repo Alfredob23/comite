@@ -9,4 +9,5 @@ urlpatterns = [
     path('editarIngreso/<int:nIngreso>/',views.editarIngreso),
     path('detalleIngreso/<int:nIngreso>/',views.detalleIngreso),
     path('verificar-cedula/', views.verificar_cedula, name='verificar_cedula')
+
 ]
