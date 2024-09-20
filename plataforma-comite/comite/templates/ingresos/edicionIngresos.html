@@ -9,6 +9,22 @@
             <div class="card">
                 <div class="card-body">
                     <form action="/editarIngreso/{{ingreso.nIngreso}}/" method="POST">{% csrf_token %}                       
+                        <div class="form-group">                            
+                             <label>Cedula:</label>
+                            <input  class="form-control" type="text" id="cedula" name="cedula" value= "{{ingreso.usuario.cedula}}"   maxlength="20" required >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nombre y apellidos:</label>
+                            <input  class="form-control" type="text" id="nombre_completo" name="nombre_completo"  value= "{{ingreso.usuario.nombre_completo}}"  maxlength="100" required >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Direccion:</label>
+                            <input  class="form-control" type="text" id="direccion" name="direccion" value= "{{ingreso.usuario.direccion}}"   maxlength="100" required>
+                        </div>
+                        
+                        
                         <label for="tipo_pago">Metodo de pago:</label>
                         <select id="tipo_pago"  class="form-control" name="tipo_pago">
                             <option value="Efectivo" {% if ingreso.tipo_pago == "Efectivo" %}selected{% endif %}>Efectivo</option>

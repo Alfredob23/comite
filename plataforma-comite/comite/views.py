@@ -6,7 +6,10 @@ from django.http import JsonResponse
 def home(request):
     ingresos = Ingresos.objects.all()
     usuarios = Usuarios.objects.all()
-    return render(request,"ingresos/ingresos.html",{"ingresos":ingresos,"usuarios":usuarios})
+    ingresos_invertidos = []
+    for i in ingresos[::-1]:
+        ingresos_invertidos.append(i)
+    return render(request,"ingresos/ingresos.html",{"ingresos":ingresos_invertidos,"usuarios":usuarios})
 
 def registrarIngreso(request):
     cedula = request.POST['cedula']

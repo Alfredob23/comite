@@ -35,17 +35,3 @@
             </table>
         </div>
 {% endblock %}
-
-
-
-    nIngreso = models.AutoField(primary_key=True)
-    usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
-        cedula = models.IntegerField(primary_key=True)
-        nombre_completo = models.CharField(max_length=100)
-        direccion = models.CharField(max_length=255)
-    tipo_pago = models.CharField(max_length=20)
-    ciudad = models.CharField(max_length=100,default='San Juan Nepomuceno',editable=False)
-    fecha = models.DateTimeField(auto_now_add=True,editable=False)
-    valorIngreso = models.IntegerField(default=0,blank=True,null=True)
-    concepto = models.CharField(max_length=200)
-  
