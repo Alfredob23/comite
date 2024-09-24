@@ -5,6 +5,8 @@ from django.http import JsonResponse,HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from io import BytesIO
+from django.template.loader import render_to_string
+import io
 
 # Create your views here.
 def home(request):
@@ -79,3 +81,8 @@ def verificar_cedula(request):
     return JsonResponse(data)
 
 
+
+def detallePDF(request,nIngreso):
+    ingreso = Ingresos.objects.get(nIngreso=nIngreso)
+    return render(request,"ingresos/ticketIngresos.html",{"ingreso":ingreso})
+    

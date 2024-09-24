@@ -8,6 +8,8 @@ urlpatterns = [
     path('eliminacionIngreso/<nIngreso>',views.eliminacionIngreso),
     path('editarIngreso/<int:nIngreso>/',views.editarIngreso),
     path('detalleIngreso/<int:nIngreso>/',views.detalleIngreso),
-    path('verificar-cedula/', views.verificar_cedula, name='verificar_cedula')
+    path('verificar-cedula/', views.verificar_cedula, name='verificar_cedula'),
+    path('detallePDF/<int:nIngreso>', views.detallePDF,)
+    
 
 ]

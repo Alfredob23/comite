@@ -82,9 +82,7 @@
                         <td><a href="edicionIngreso/{{items.nIngreso}}" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a></td>
                         <td><a href="eliminacionIngreso/{{items.nIngreso}}" class="btn btn-danger btnEliminacion"> <i class="fa-solid fa-trash-can"></i></a></td>
                         <td><a href="detalleIngreso/{{items.nIngreso}}" class="btn btn-success"><i class="fa-solid fa-magnifying-glass"></i></a></td>
-                        <td><a href="detalleIngreso/{{items.nIngreso}}" class="btn btn-light"><i class="fa-solid fa-file-pdf"></i></i></a></td>
-
-                        
+                        <td><a href="detallePDF/{{items.nIngreso}}" onclick="abrirPopup(event, 'detallePDF/{{items.nIngreso}}', 'Mi ventana emergente', 800, 1000)"  class="btn btn-light"><i class="fa-solid fa-print"></i></i></i></a></td>
 
                     </tr>
                     {% endfor%}
@@ -96,4 +94,5 @@
 <script type="text/javascript">
     var verificarCedulaUrl = "{% url 'verificar_cedula' %}";
 </script>
+
 {% endblock %}
