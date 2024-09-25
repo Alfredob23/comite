@@ -9,7 +9,8 @@ urlpatterns = [
     path('editarIngreso/<int:nIngreso>/',views.editarIngreso),
     path('detalleIngreso/<int:nIngreso>/',views.detalleIngreso),
     path('verificar-cedula/', views.verificar_cedula, name='verificar_cedula'),
-    path('detallePDF/<int:nIngreso>', views.detallePDF,)
+    path('detallePDF/<int:nIngreso>', views.detallePDF,),
+    path('descargarExcel/',views.export_to_excel,name='exportar a excel')
     
 
 ]

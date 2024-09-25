@@ -7,6 +7,8 @@ from xhtml2pdf import pisa
 from io import BytesIO
 from django.template.loader import render_to_string
 import io
+import openpyxl
+from openpyxl.styles import Font
 
 # Create your views here.
 def home(request):
@@ -59,8 +61,6 @@ def editarIngreso(request,nIngreso):
     ingreso.save()
     return redirect('/')
 
-def generar_ticket(request):
-    pass
 
 def verificar_cedula(request):
     cedula = request.GET.get('cedula', None)
@@ -80,9 +80,36 @@ def verificar_cedula(request):
     
     return JsonResponse(data)
 
-
-
 def detallePDF(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     return render(request,"ingresos/ticketIngresos.html",{"ingreso":ingreso})
+
+def export_to_excel(request):
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = 'Personas'
+        
+    sheet.append(['nIngreso', 'Nombre', 'Cedula','Direccion', 'Metodo de Pago', 'Valor','Concepto', 'Ciudad', 'Fecha'])
+    for cell in sheet[1]:
+        cell.font = Font(bold=True) 
     
+    ingresos = Ingresos.objects.all()
+    
+    for ingreso in ingresos:
+        if ingreso.fecha:
+            fecha = ingreso.fecha.replace(tzinfo=None)
+        else:
+            fecha= None
+        sheet.append([ingreso.nIngreso, ingreso.usuario.nombre_completo, ingreso.usuario.cedula,ingreso.usuario.direccion, ingreso.tipo_pago, ingreso.valorIngreso,ingreso.concepto, ingreso.ciudad, fecha])
+         
+    for column in sheet.columns:
+        max_length = max(len(str(cell.value)) for cell in column if cell.value)  # Encuentra el texto más largo
+        adjusted_width = max_length + 2  # Añadir un pequeño margen
+        sheet.column_dimensions[column[0].column_letter].width = adjusted_width
+    
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="ingresos.xlsx"'     
+
+    workbook.save(response)
+
+    return response

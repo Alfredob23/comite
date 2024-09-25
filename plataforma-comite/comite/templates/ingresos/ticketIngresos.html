@@ -1,76 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        @page {
-            size: 80mm 200mm; /* Ancho y alto del ticket */
-            margin: 0; /* Sin márgenes */
-        }
-
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            width: 80mm;
-            margin: 0;
-            padding: 0;
-        }
-
-        .ticket {
-            padding: 10px;
-            border: 1px solid #000;
-            border-radius: 5px;
-        }
-
-        .header {
-            text-align: center;
-            border-bottom: 1px dashed #000;
-            margin-bottom: 10px;
-        }
-
-        .header h1 {
-            margin: 5px 0;
-            font-size: 24px;
-        }
-
-        .header .matricula {
-            font-size: 12px;
-            margin: 2px 0;
-        }
-
-        .footer {
-            border-top: 1px dashed #000;
-            text-align: left;
-            margin-top: 10px;
-        }
-
-        .footer .row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 5px;
-            padding: 5px 0;
-        }
-
-        .footer .row .label {
-            font-weight: bold;
-            min-width: 100px;
-        }
-
-        .footer .row .value {
-            flex-grow: 1;
-            text-align: right;
-        }
-    </style>
-    <title>Ticket</title>
-
-</style>
-<title>Ticket</title>
 <script>
     function printTicket() {
         window.print(); // Abre la ventana de impresión
     }
 </script>
+<link rel="stylesheet" href="{%  static 'css/style_ticket.css' %}">
 </head>
 <body>
     <div class="ticket">
@@ -120,6 +59,14 @@
                 <span class="value">{{ ingreso.fecha }}</span>
             </div>
         </div>
+    </div>
+    <div>
+        <p>EXPEDIDO POR:</p>
+        <p>Comite de Ganaeros de San Juan</p>
+        <p>COMUGASAN </p>
+        <p>Rafael Santos P</p>
+        <p>Secretaria </p>
+
     </div>
 </body>
 </html>
