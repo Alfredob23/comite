@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %} Comite de Ganaderos {% endblock %}\
+
+{% block body %}
+        <h2>Detalle de Ingreso</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>nIngreso</th>
+                        <th>Nombre</th>
+                        <th>Cedula</th>
+                        <th>Direccion</th>
+                        <th>Metodo de Pago</th>
+                        <th>Valor</th>
+                        <th>Concepto</th>
+                        <th>Ciudad</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ingreso.nIngreso}}</td>
+                        <td>{{ingreso.usuario.nombre_completo}}</td>
+                        <td>{{ingreso.usuario.cedula}}</td>
+                        <td>{{ingreso.usuario.direccion}}</td>
+                        <td>{{ingreso.tipo_pago}}</td>
+                        <td>{{ingreso.valorIngreso}}</td>
+                        <td>{{ingreso.concepto}}</td>
+                        <td>{{ingreso.ciudad}}</td>
+                        <td>{{ingreso.fecha|date:"d/m/Y"}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+{% endblock %}

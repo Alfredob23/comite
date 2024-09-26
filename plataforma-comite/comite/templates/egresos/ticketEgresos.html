@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+    function printTicket() {
+        window.print(); // Abre la ventana de impresión
+    }
+</script>
+<link rel="stylesheet" href="{%  static 'css/style_ticket.css' %}">
+</head>
+<body>
+    <div class="ticket">
+        <div class="header">
+            <h1>COMUGASAN</h1>
+            <p class="matricula">Número de Matrícula: 123456789</p>
+            <p>SAN JUAN NEPOMUCENO</p>
+            <p>65653</p>
+            <p>{{ ingreso.nIngreso}}</p>
+        </div>
+
+        <div class="footer">
+            <div class="row">
+                <span class="label">Nº Ingreso:</span>
+                <span class="value">{{ingreso.nIngreso }}</span>
+            </div>
+            <div class="row">
+                <span class="label">Nombre:</span>
+                <span class="value">{{ ingreso.usuario.nombre_completo }}</span>
+            </div>
+            <div class="row">
+                <span class="label">Cédula:</span>
+                <span class="value">{{ ingreso.usuario.cedula }}</span>
+            </div>
+            <div class="row">
+                <span class="label">Dirección:</span>
+                <span class="value">{{ ingreso.usuario.direccion }}</span>
+            </div>
+            <div class="row">
+                <span class="label">Método de Pago:</span>
+                <span class="value">{{ ingreso.tipo_pago }}</span>
+            </div>
+            <div class="row">
+                <span class="label">Valor:</span>
+                <span class="value">{{ ingreso.valorIngreso }}</span>
+            </div>
+            <div class="row">
+                <span class="label">Concepto:</span>
+                <span class="value">{{ ingreso.concepto }}</span>
+            </div>
+            <div class="row">
+                <span class="label">Ciudad:</span>
+                <span class="value">{{ ingreso.ciudad }}</span>
+            </div>
+            <div class="row">
+                <span class="label">Fecha:</span>
+                <span class="value">{{ ingreso.fecha }}</span>
+            </div>
+        </div>
+    </div>
+    <div>
+        <p>EXPEDIDO POR:</p>
+        <p>Comite de Ganaeros de San Juan</p>
+        <p>COMUGASAN </p>
+        <p>Rafael Santos P</p>
+        <p>Secretaria </p>
+
+    </div>
+</body>
+</html>

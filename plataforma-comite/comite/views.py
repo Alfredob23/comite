@@ -19,6 +19,8 @@ def home(request):
         ingresos_invertidos.append(i)
     return render(request,"ingresos/ingresos.html",{"ingresos":ingresos_invertidos,"usuarios":usuarios})
 
+
+
 def registrarIngreso(request):
     cedula = request.POST['cedula']
     nombre_completo = request.POST['nombre_completo']
@@ -36,19 +38,27 @@ def registrarIngreso(request):
         return render(request, '/', {'error': 'Todos los campos son requeridos.'})
     return render(request, '/')
 
+
+
 def eliminacionIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     ingreso.delete()
     return redirect('/')
+
+
 
 def edicionIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     return render(request,"ingresos/edicionIngresos.html",{"ingreso":ingreso})
 
 
+
+
 def detalleIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     return render(request,"ingresos/detalleIngresos.html",{"ingreso":ingreso})
+
+
 
 def editarIngreso(request,nIngreso):
     pago = request.POST['tipo_pago']
@@ -83,6 +93,8 @@ def verificar_cedula(request):
 def detallePDF(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     return render(request,"ingresos/ticketIngresos.html",{"ingreso":ingreso})
+
+
 
 def export_to_excel(request):
     workbook = openpyxl.Workbook()

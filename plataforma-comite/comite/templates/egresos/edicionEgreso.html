@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %} Comite de Ganaderos {% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-4 offset-md-4" >
+            <h2>Edicion Ingreso</h2>   
+            <div class="card">
+                <div class="card-body">
+                    <form action="/editarIngreso/{{ingreso.nIngreso}}/" method="POST">{% csrf_token %}                       
+                        <div class="form-group">                            
+                             <label>Cedula:</label>
+                            <input  class="form-control" type="text" id="cedula" name="cedula" value= "{{ingreso.usuario.cedula}}"   maxlength="20" required >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nombre y apellidos:</label>
+                            <input  class="form-control" type="text" id="nombre_completo" name="nombre_completo"  value= "{{ingreso.usuario.nombre_completo}}"  maxlength="100" required >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Direccion:</label>
+                            <input  class="form-control" type="text" id="direccion" name="direccion" value= "{{ingreso.usuario.direccion}}"   maxlength="100" required>
+                        </div>
+                        
+                        
+                        <label for="tipo_pago">Metodo de pago:</label>
+                        <select id="tipo_pago"  class="form-control" name="tipo_pago">
+                            <option value="Efectivo" {% if ingreso.tipo_pago == "Efectivo" %}selected{% endif %}>Efectivo</option>
+                            <option value="Transaccion" {% if ingreso.tipo_pago == "Transaccion" %}selected{% endif %}>Transaccion</option>
+                            <option value="Consignacion" {% if ingreso.tipo_pago == "Consignacion" %}selected{% endif %}>Consignacion</option>
+                        </select>
+    
+                        <div class="form-group">
+                            <label>Valor:</label>
+                            <input  class="form-control" type="text" id="valorIngreso" name="valorIngreso" value= "{{ingreso.valorIngreso}}" maxlength="20" required >
+                        </div>
+    
+                        <div>
+                            <label for="concepto">Concepto:</label>
+                            <select id="concepto"  class="form-control"  name="concepto">
+                                <option value="Pago Vacunas" {% if ingreso.concepto == "Pago Vacunas" %}selected{% endif %}>Pago Vacunas</option>
+                                <option value="Abono Asociado" {% if ingreso.concepto == "Abono Asociado" %}selected{% endif %}>Abono Asociado</option>
+                                <option value="Donaciones" {% if ingreso.concepto == "Donaciones" %}selected{% endif %}>Donaciones</option>
+                            </select>
+                        </div>
+    
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary  w-100 text-white">Guardar</button>
+                        </div>    
+                    </form>
+                    
+                </div>
+            </div> 
+
+        </div>
+    </div>
+
+{% endblock %}
