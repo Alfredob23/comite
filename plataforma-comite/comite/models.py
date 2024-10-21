@@ -19,10 +19,18 @@ class Vacunadores(models.Model):
         texto = f"{self.cedula:} {self.nombre_completo}"
         return texto
 
+class Vacunas(models.Model):
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.IntegerField(default=0)  # Campo para el stock
+
+    def __str__(self):
+        return self.nombre
 
 class Ingresos(models.Model):
     nIngreso = models.AutoField(primary_key=True)
-    usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE,null=True)
     tipo_pago = models.CharField(max_length=20)
     ciudad = models.CharField(max_length=100,default='San Juan Nepomuceno',editable=False)
     fecha = models.DateTimeField(auto_now_add=True,editable=False)
@@ -34,14 +42,19 @@ class Ingresos(models.Model):
         return texto
     
 class Egresos(models.Model):
-    nEngreso = models.AutoField(primary_key=True)
-    usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    nEgreso = models.AutoField(primary_key=True)
     tipo_pago = models.CharField(max_length=20)
-    ciudad = models.CharField(max_length=100,default='San Juan Nepomuceno',editable=False)
-    fecha = models.DateTimeField(auto_now_add=True,editable=False)
-    valorIngreso = models.IntegerField(default=0,blank=True,null=True)
+    valorEgreso = models.IntegerField(default=0,blank=True,null=True)
     concepto = models.CharField(max_length=200)
+    ciudad = models.CharField(max_length=100,default='San Juan Nepomuceno',editable=False)
+    recibe = models.CharField(max_length=100, null=False)
+    aprobado = models.CharField(max_length=100,default='Jorse Arzuaga',editable=False)
+    revisado = models.CharField(max_length=100,default='Jorse Arzuaga',null=False)
+    contabilizado = models.CharField(max_length=100,default='Eduard Posso',editable=False)
+    fecha = models.DateTimeField(auto_now_add=True,editable=False)
+    
+
     
     def __str__(self):
-        texto = f"{self.nIngreso} {self.valorIngreso} {self.concepto}"
+        texto = f"{self.nEgreso} {self.valorEgreso} {self.concepto}"
         return texto

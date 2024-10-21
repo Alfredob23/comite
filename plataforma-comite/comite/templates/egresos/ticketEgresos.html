@@ -18,45 +18,41 @@
             <p class="matricula">Número de Matrícula: 123456789</p>
             <p>SAN JUAN NEPOMUCENO</p>
             <p>65653</p>
-            <p>{{ ingreso.nIngreso}}</p>
+            <p>{{egreso.nEgreso}}</p>
         </div>
 
         <div class="footer">
             <div class="row">
-                <span class="label">Nº Ingreso:</span>
-                <span class="value">{{ingreso.nIngreso }}</span>
+                <span class="label">Nº Egreso:</span>
+                <span class="value">{{egreso.nEgreso }}</span>
             </div>
             <div class="row">
-                <span class="label">Nombre:</span>
-                <span class="value">{{ ingreso.usuario.nombre_completo }}</span>
-            </div>
-            <div class="row">
-                <span class="label">Cédula:</span>
-                <span class="value">{{ ingreso.usuario.cedula }}</span>
-            </div>
-            <div class="row">
-                <span class="label">Dirección:</span>
-                <span class="value">{{ ingreso.usuario.direccion }}</span>
-            </div>
-            <div class="row">
-                <span class="label">Método de Pago:</span>
-                <span class="value">{{ ingreso.tipo_pago }}</span>
+                <span class="label">Tipo de Pago:</span>
+                <span class="value">{{ egreso.tipo_pago }}</span>
             </div>
             <div class="row">
                 <span class="label">Valor:</span>
-                <span class="value">{{ ingreso.valorIngreso }}</span>
+                <span class="value">{{ egreso.valorEgreso }}</span>
             </div>
             <div class="row">
                 <span class="label">Concepto:</span>
-                <span class="value">{{ ingreso.concepto }}</span>
+                <span class="value">{{ egreso.concepto }}</span>
+            </div>
+            <div class="row"></div>
+                <span class="label">Concepto:</span>
+                <span class="value">{{ egreso.concepto }}</span>
             </div>
             <div class="row">
-                <span class="label">Ciudad:</span>
-                <span class="value">{{ ingreso.ciudad }}</span>
+                <span class="label">Recibe:</span>
+                <span class="value">{{ egreso.recibe }}</span>
+            </div>
+            <div class="row">
+                <span class="label">Revisa:</span>
+                <span class="value">{{ egreso.revisado }}</span>
             </div>
             <div class="row">
                 <span class="label">Fecha:</span>
-                <span class="value">{{ ingreso.fecha }}</span>
+                <span class="value">{{ egreso.fecha }}</span>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import render,redirect
-from .models import Ingresos,Usuarios
+from .models import Ingresos,Usuarios,Egresos,Vacunadores,Vacunas
 from django.http import JsonResponse,HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -18,8 +18,6 @@ def home(request):
     for i in ingresos[::-1]:
         ingresos_invertidos.append(i)
     return render(request,"ingresos/ingresos.html",{"ingresos":ingresos_invertidos,"usuarios":usuarios})
-
-
 
 def registrarIngreso(request):
     cedula = request.POST['cedula']
@@ -39,12 +37,10 @@ def registrarIngreso(request):
     return render(request, '/')
 
 
-
 def eliminacionIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     ingreso.delete()
     return redirect('/')
-
 
 
 def edicionIngreso(request,nIngreso):
@@ -53,11 +49,9 @@ def edicionIngreso(request,nIngreso):
 
 
 
-
 def detalleIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     return render(request,"ingresos/detalleIngresos.html",{"ingreso":ingreso})
-
 
 
 def editarIngreso(request,nIngreso):
@@ -95,7 +89,6 @@ def detallePDF(request,nIngreso):
     return render(request,"ingresos/ticketIngresos.html",{"ingreso":ingreso})
 
 
-
 def export_to_excel(request):
     workbook = openpyxl.Workbook()
     sheet = workbook.active
@@ -125,3 +118,65 @@ def export_to_excel(request):
     workbook.save(response)
 
     return response
+
+
+def egresos(request):
+    egresos = Egresos.objects.all()
+    egresos_invertidos = []
+    for i in egresos[::-1]:
+        egresos_invertidos.append(i)
+    return render(request,"egresos/egresos.html",{"egresos":egresos_invertidos})
+
+
+def registrarEgreso(request):
+    tipo_pago = request.POST['tipo_pago']
+    valorEgreso = request.POST['valorEgreso']
+    if request.POST['concepto'] == 'Otro':
+        concepto = request.POST['otroConcepto']
+    else:
+        concepto = request.POST['concepto']
+    recibe = request.POST['recibe']
+    revisado = request.POST['revisado']
+    egreso = Egresos.objects.get_or_create(tipo_pago=tipo_pago,valorEgreso = valorEgreso,concepto = concepto,recibe = recibe,revisado = revisado)
+    return redirect('/egresos')
+
+
+
+def edicionEgreso(request,nEgreso):
+    egreso = Egresos.objects.get(nEgreso=nEgreso)
+    return render(request,"egresos/edicionEgresos.html",{"egreso":egreso})
+
+
+
+def eliminacionEgreso(request,nEgreso):
+    egreso = Egresos.objects.get(nEgreso=nEgreso)
+    egreso.delete()
+    return redirect('/egresos')
+
+
+def detalleEgreso(request,nEgreso):
+    egreso = Egresos.objects.get(nEgreso=nEgreso)
+    return render(request,"egresos/detalleEgreso.html",{"egreso":egreso})
+
+
+def editarEgreso(request,nEgreso):
+    tipo_pago = request.POST['tipo_pago']
+    valorEgreso = request.POST['valorEgreso']
+    if request.POST['concepto'] == 'Otro':
+        concepto = request.POST['otroConcepto']
+    else:
+        concepto = request.POST['concepto']
+    recibe = request.POST['recibe']
+    revisado = request.POST['revisado']
+    egreso = Egresos.objects.get(nEgreso=nEgreso)
+    egreso.tipo_pago = tipo_pago
+    egreso.valorEgreso = valorEgreso
+    egreso.concepto = concepto
+    egreso.recibe = recibe
+    egreso.revisado = revisado
+    egreso.save()    
+    return redirect('/egresos')
+
+def imprimirEgreso(request,nEgreso):
+    egreso = Egresos.objects.get(nEgreso=nEgreso)
+    return render(request,"egresos/ticketEgresos.html",{"egreso":egreso})
