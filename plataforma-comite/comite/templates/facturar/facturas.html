@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %} Comite de Ganaderos {% endblock %}
+{% load static %}
+{% block body %}
+<div class="row">
+    <div class=" col-sm-12 col-md-6 col-lg-3 col-xl-3">
+        <h2 style="text-align: center;">Agregar Egreso</h2>   
+        <div class="card">
+            <div class="card-body">
+                <form action="/registrarEgreso/" id="registro-form" method="POST">
+                    {% csrf_token %}
+                    <label for="tipo_pago">Método de pago:</label>
+                    <select id="tipo_pago" class="form-control" name="tipo_pago">
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Transaccion">Transacción</option>
+                        <option value="Consignacion">Consignación Bancaria</option>
+                        <option value="Cheque">Cheque</option>
+                    </select>
+                
+                    <div class="form-group">
+                        <label>Valor:</label>
+                        <input class="form-control" type="number" id="valorEgreso" name="valorEgreso" maxlength="20" required>
+                    </div>
+                
+                    <div>
+                        <label for="concepto">Concepto:</label>
+                        <select id="concepto" class="form-control" name="concepto">
+                            <option value="Pago Servicios Publicos">Pago Servicios Publicos</option>
+                            <option value="Pago Arriendo">Pago Arriendo</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                
+                    <!-- Campo de texto oculto para el concepto personalizado -->
+                    <div class="form-group" id="otro-concepto" style="display: none;">
+                        <label for="otroConcepto">Especificar otro concepto:</label>
+                        <input class="form-control" type="text" id="otroConcepto" name="otroConcepto" maxlength="50">
+                    </div>
+
+                    <div class="form-group" class="form-control">
+                        <label>Recibe:</label>
+                        <input class="form-control" type="text" id="recibe" name="recibe" maxlength="20" required>
+                    </div>
+                    <div class="form-group" class="form-control">
+                        <label>Revisado Por:</label>
+                        <input class="form-control" type="text" id="revisado" name="revisado" maxlength="20" required>
+                    </div>
+                
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary w-100 text-white">Guardar</button>
+                    </div>
+                </form>   
+            </div>
+        </div> 
+    </div>
+    <div class=" col-sm-12 col-md-6 col-lg-9 col-xl-9">
+        <h2 style="text-align: center;">Lista de Egresos</h2>
+        <div style="text-align: right;">
+        <td><a href="/egresos/descargarExcelEgresos/" class="btn btn-success">  <i class="fa-solid fa-download">&nbsp;</i><i class="fa-solid fa-file-excel"> </i></i></></a></td>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>nEgreso</th>
+                        <th>Tipo de Pago</th>
+                        <th>Fecha de Registro</th>
+                        <th>Valor Egreso</th>
+                        <th>Concepto</th>
+                        <th colspan="4">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for items in egresos %}
+                    <tr>
+                        <td>{{items.nEgreso}}</td>
+                        <td>{{items.tipo_pago}}</td>
+                        <td>{{items.fecha|date:"d/m/Y"}}</td>
+                        <td>{{items.valorEgreso}}</td>
+                        <td>{{items.concepto}}</td>
+                        <td><a href="edicionEgreso/{{items.nEgreso}}" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a></td>
+                        <td><a href="eliminacionEgreso/{{items.nEgreso}}" class="btn btn-danger btnEliminacion"> <i class="fa-solid fa-trash-can"></i></a></td>
+                        <td><a href="detalleEgreso/{{items.nEgreso}}" class="btn btn-success"><i class="fa-solid fa-magnifying-glass"></i></a></td>
+                        <td><a href="imprimirEgreso/{{items.nEgreso}}" onclick="abrirPopup(event, 'imprimirEgreso/{{items.nEgreso}}', 'Mi ventana emergente', 800, 1000)"  class="btn btn-dark"><i class="fa-solid fa-print"></i></i></i></a></td>
+                    </tr>
+                    {% endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var verificarCedulaUrl = "{% url 'verificar_cedula' %}";
+</script>
+
+{% endblock %}

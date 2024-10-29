@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %} Comite de Ganaderos {% endblock %}\
+
+{% block body %}
+        <h2 style="text-align: center;">Detalle de Egreso</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>nEgreso</th>
+                        <th>Tipo de Pago</th>
+                        <th>Fecha de Registro</th>
+                        <th>Valor Egreso</th>
+                        <th>Concepto</th>
+                        <th>Recibe</th>
+                        <th>Aprueba</th>
+                        <th>Revisa</th>
+                        <th>Contabiliza</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{egreso.nEgreso}}</td>
+                        <td>{{egreso.tipo_pago}}</td>
+                        <td>{{egreso.fecha|date:"d/m/Y"}}</td>
+                        <td>{{egreso.valorEgreso}}</td>
+                        <td>{{egreso.concepto}}</td>
+                        <td>{{egreso.recibe}}</td>
+                        <td>{{egreso.aprobado}}</td>
+                        <td>{{egreso.revisado}}</td>
+                        <td>{{egreso.contabilizado}}</td>
+                </tbody>
+            </table>
+        </div>
+{% endblock %}

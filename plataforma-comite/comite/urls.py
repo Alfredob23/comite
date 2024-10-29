@@ -18,6 +18,7 @@ urlpatterns = [
     path('egresos/edicionEgreso/<nEgreso>',views.edicionEgreso),
     path('egresos/editarEgreso/<int:nEgreso>/',views.editarEgreso),
     path('egresos/imprimirEgreso/<int:nEgreso>', views.imprimirEgreso),
-    path('egresos/descargarExcelEgresos/', views.export_to_excel_egreso)
+    path('egresos/descargarExcelEgresos/', views.export_to_excel_egreso),
+    path('facturar/',views.facturar)
 
 ]

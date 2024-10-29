@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %} Comite de Ganaderos {% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-4 offset-md-4" >
+            <h2 style="text-align: center;">Edicion Egreso</h2>   
+            <div class="card">
+                <div class="card-body">
+                    <form action="/egresos/editarEgreso/{{egreso.nEgreso}}/" method="POST">{% csrf_token %}                       
+                        <div class="form-group">                            
+                            <label for="tipo_pago">Método de pago:</label>
+                            <select id="tipo_pago" class="form-control" name="tipo_pago">
+                                <option value="Efectivo" {% if egreso.tipo_pago == "Efectivo" %}selected{% endif %}>Efectivo</option>
+                                <option value="Transaccion" {% if egreso.tipo_pago == "Transaccion" %}selected{% endif %}>Transaccion</option>
+                                <option value="Consignacion" {% if egreso.tipo_pago == "Consignacion" %}selected{% endif %}>Consignacion</option>
+                                <option value="Cheque" {% if egreso.tipo_pago == "Cheque" %}selected{% endif %}>Cheque</option>
+                            </select>
+                        
+                            <div class="form-group">
+                                <label>Valor:</label>
+                                <input  class="form-control" type="text" id="valorEgreso" name="valorEgreso" value= "{{egreso.valorEgreso}}" maxlength="20" required >
+                            </div>
+                        
+                            <div>
+                                <label for="concepto">Concepto:</label>
+                                <select id="concepto" class="form-control" name="concepto">
+                                    <option value="Pago Servicios Publicos" {% if egreso.concepto == "Pago Servicios Publicos" %}selected{% endif %}>Pago Servicios Publicos</option>
+                                    <option value="Pago Arriendo" {% if egreso.concepto == "Pago Arriendo" %}selected{% endif %}>Pago Arriendo</option>
+                                    <option value="{{egreso.concepto}}" {% if  egreso.concepto != "{{egreso.otroConcepto}}" %}selected{% endif %}>{{egreso.concepto}}</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                        
+                            <!-- Campo de texto oculto para el concepto personalizado -->
+                            <div class="form-group" id="otro-concepto" style="display: none;">
+                                <label for="otroConcepto">Especificar otro concepto:</label>
+                                <input class="form-control" type="text" id="otroConcepto" name="otroConcepto" maxlength="50">
+                            </div>
+        
+                            <div class="form-group" class="form-control">
+                                <label>Recibe:</label>
+                                <input  class="form-control" type="text" id="recibe" name="recibe" value= "{{egreso.recibe}}" maxlength="100" required >
+                            </div>
+                            <div class="form-group" class="form-control">
+                                <label>Revisado Por:</label>
+                                <input  class="form-control" type="text" id="revisado" name="revisado" value= "{{egreso.revisado}}" maxlength="100" required >
+                            </div>
+                        
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary w-100 text-white">Guardar</button>
+                            </div>  
+                    </form>
+                    
+                </div>
+            </div> 
+
+        </div>
+    </div>
+{% endblock %}
