@@ -120,6 +120,38 @@ def export_to_excel(request):
     return response
 
 
+def export_to_excel_egreso(request):
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = 'Personas'
+    
+        
+    sheet.append(['No Egreso', 'Tipo Pago', 'Valor','Concepto', 'Ciudad', 'Recibe','Aprobado', 'Revisado','Contabilizado','Fecha'])
+    for cell in sheet[1]:
+        cell.font = Font(bold=True) 
+    
+    egresos = Egresos.objects.all()
+    
+    for egreso in egresos:
+        if egreso.fecha:
+            fecha = egreso.fecha.replace(tzinfo=None)
+        else:
+            fecha= None
+        sheet.append([egreso.nEgreso, egreso.tipo_pago, egreso.valorEgreso,egreso.concepto,egreso.ciudad,egreso.recibe,egreso.aprobado,egreso.revisado,egreso.contabilizado,fecha])
+        
+    for column in sheet.columns:
+        max_length = max(len(str(cell.value)) for cell in column if cell.value)  # Encuentra el texto más largo
+        adjusted_width = max_length + 2  # Añadir un pequeño margen
+        sheet.column_dimensions[column[0].column_letter].width = adjusted_width
+    
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="egresos.xlsx"'     
+
+    workbook.save(response)
+
+    return response
+
+
 def egresos(request):
     egresos = Egresos.objects.all()
     egresos_invertidos = []
