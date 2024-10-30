@@ -5,7 +5,7 @@
 {% block body %}
 <div class="row">
     <div class=" col-sm-12 col-md-6 col-lg-3 col-xl-3">
-        <h2 style="text-align: center;">Agregar Egreso</h2>   
+        <h2 style="text-align: center;">Facturar</h2>   
         <div class="card">
             <div class="card-body">
                 <form action="/registrarEgreso/" id="registro-form" method="POST">
@@ -55,7 +55,7 @@
         </div> 
     </div>
     <div class=" col-sm-12 col-md-6 col-lg-9 col-xl-9">
-        <h2 style="text-align: center;">Lista de Egresos</h2>
+        <h2 style="text-align: center;">Lista de Facturas</h2>
         <div style="text-align: right;">
         <td><a href="/egresos/descargarExcelEgresos/" class="btn btn-success">  <i class="fa-solid fa-download">&nbsp;</i><i class="fa-solid fa-file-excel"> </i></i></></a></td>
         </div>
@@ -63,22 +63,28 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>nEgreso</th>
-                        <th>Tipo de Pago</th>
-                        <th>Fecha de Registro</th>
-                        <th>Valor Egreso</th>
-                        <th>Concepto</th>
+                        <th>nFactura</th>
+                        <th>Cedula</th>
+                        <th>Nombre</th>
+                        <th>Biologico</th>
+                        <th>No Dosis</th>
+                        <th>V. Unitario</th>
+                        <th>V. Total</th>
+                        <th>Fecha</th>
                         <th colspan="4">Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for items in egresos %}
+                    {% for items in facturas %}
                     <tr>
-                        <td>{{items.nEgreso}}</td>
-                        <td>{{items.tipo_pago}}</td>
+                        <td>{{items.nFactura}}</td>
+                        <td>{{items.usuario.cedula}}</td>
+                        <td>{{items.usuario.nombre_completo}}</td>
+                        <td>{{items.vacunas.nombre}}</td>
+                        <td>{{items.cantidad_vacunas}}</td>
+                        <td>{{items.vacunas.valor_unitario}}</td>
+                        <td>{{items.valor_total}}</td>
                         <td>{{items.fecha|date:"d/m/Y"}}</td>
-                        <td>{{items.valorEgreso}}</td>
-                        <td>{{items.concepto}}</td>
                         <td><a href="edicionEgreso/{{items.nEgreso}}" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a></td>
                         <td><a href="eliminacionEgreso/{{items.nEgreso}}" class="btn btn-danger btnEliminacion"> <i class="fa-solid fa-trash-can"></i></a></td>
                         <td><a href="detalleEgreso/{{items.nEgreso}}" class="btn btn-success"><i class="fa-solid fa-magnifying-glass"></i></a></td>

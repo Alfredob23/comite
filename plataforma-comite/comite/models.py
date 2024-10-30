@@ -13,7 +13,7 @@ class Usuarios(models.Model):
 class Vacunas(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
-    valor_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+    valor_unitario = models.IntegerField()
 
     def __str__(self):
         return self.nombre
@@ -57,7 +57,12 @@ class Facturar(models.Model):
     cantidad_vacunas = models.IntegerField(default=0)
     lote = models.IntegerField(default=0)
     laboratio = models.CharField(max_length=100)
-    valor_total = models.IntegerField(default=0)
+    valor_total = models.IntegerField(default=0,editable=False)
+    fecha = models.DateTimeField(auto_now_add=True,editable=False)
+    
+    def save(self, *args, **kwargs):
+        self.valor_total = self.cantidad_vacunas* self.vacunas.valor_unitario
+        super().save(*args, **kwargs) 
          
     def __str__(self):
         texto = f"{self.nFactura} {self.vacunas.nombre} {self.cantidad_vacunas}"
