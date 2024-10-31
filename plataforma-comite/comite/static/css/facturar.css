@@ -1,0 +1,9 @@
+.lote-inputs {
+    display: flex;
+    gap: 5px; /* Espacio entre los campos */
+}
+
+.lote-inputs input {
+    flex: 1; /* Hace que cada input ocupe el mismo ancho */
+    max-width: 150px; /* Limita el ancho máximo de cada input */
+}

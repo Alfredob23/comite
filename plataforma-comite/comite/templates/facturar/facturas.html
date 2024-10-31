@@ -3,48 +3,55 @@
 {% block title %} Comite de Ganaderos {% endblock %}
 {% load static %}
 {% block body %}
+
+
 <div class="row">
     <div class=" col-sm-12 col-md-6 col-lg-3 col-xl-3">
         <h2 style="text-align: center;">Facturar</h2>   
         <div class="card">
             <div class="card-body">
-                <form action="/registrarEgreso/" id="registro-form" method="POST">
+                <form action="/registrarFactura/" id="registro-form" method="POST">
                     {% csrf_token %}
-                    <label for="tipo_pago">Método de pago:</label>
-                    <select id="tipo_pago" class="form-control" name="tipo_pago">
-                        <option value="Efectivo">Efectivo</option>
-                        <option value="Transaccion">Transacción</option>
-                        <option value="Consignacion">Consignación Bancaria</option>
-                        <option value="Cheque">Cheque</option>
-                    </select>
-                
                     <div class="form-group">
-                        <label>Valor:</label>
-                        <input class="form-control" type="number" id="valorEgreso" name="valorEgreso" maxlength="20" required>
-                    </div>
-                
-                    <div>
-                        <label for="concepto">Concepto:</label>
-                        <select id="concepto" class="form-control" name="concepto">
-                            <option value="Pago Servicios Publicos">Pago Servicios Publicos</option>
-                            <option value="Pago Arriendo">Pago Arriendo</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                    </div>
-                
-                    <!-- Campo de texto oculto para el concepto personalizado -->
-                    <div class="form-group" id="otro-concepto" style="display: none;">
-                        <label for="otroConcepto">Especificar otro concepto:</label>
-                        <input class="form-control" type="text" id="otroConcepto" name="otroConcepto" maxlength="50">
+                        <label>Cedula:</label>
+                        <input  class="form-control" type="text" id="cedula" name="cedula"   maxlength="20" required >
                     </div>
 
-                    <div class="form-group" class="form-control">
-                        <label>Recibe:</label>
-                        <input class="form-control" type="text" id="recibe" name="recibe" maxlength="20" required>
+                    <div class="form-group">
+                        <label>Nombre y apellidos:</label>
+                        <input  class="form-control" type="text" id="nombre_completo" name="nombre_completo"   maxlength="100" required >
                     </div>
+                    
+                    <div class="form-group">
+                        <label>Direccion o Municipio:</label>
+                        <input  class="form-control" type="text" id="direccion" name="direccion"   maxlength="100" required>
+                    </div>
+                
+                    <div id="campo-principal" class="form-group" style="display: flex; gap: 10px; align-items: center;">
+                        <div style="flex: 1;">
+                            <label for="biologico">Biologico:</label>
+                            <select id="biologico" class="form-control" name="biologico">
+                                <option value="Aftosa">Aftosa</option>
+                                <option value="Cepa19">Cepa19</option>
+                                <option value="Rabia">Rabia</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="cantidad">Cantidad:</label>
+                            <input class="form-control" type="number" id="cantidad" name="cantidad[]" maxlength="20" required>
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="lote">Lote:</label>
+                            <input class="form-control" type="number" id="lote" name="lote[]" maxlength="20" required>
+                        </div>
+                    </div>
+                    
+                    <div id="campos-adicionales"> </div>
+
+                    <button type="button" onclick="addCantidadLoteFields()" style="margin-top: 12px;"><i class="fa-solid fa-plus"></i></button>
                     <div class="form-group" class="form-control">
-                        <label>Revisado Por:</label>
-                        <input class="form-control" type="text" id="revisado" name="revisado" maxlength="20" required>
+                        <label>Total:</label>
+                        <input class="form-control" type="number" id="total" name="total" maxlength="20" required>
                     </div>
                 
                     <div class="form-group">
@@ -80,9 +87,9 @@
                         <td>{{items.nFactura}}</td>
                         <td>{{items.usuario.cedula}}</td>
                         <td>{{items.usuario.nombre_completo}}</td>
-                        <td>{{items.vacunas.nombre}}</td>
-                        <td>{{items.cantidad_vacunas}}</td>
-                        <td>{{items.vacunas.valor_unitario}}</td>
+                        <td>{{items.biologico}}</td>
+                        <td>{{items.cantidad_aftosa}}</td>
+                        <td>{{items.informacion_biologicos.valor_unitario}}</td>
                         <td>{{items.valor_total}}</td>
                         <td>{{items.fecha|date:"d/m/Y"}}</td>
                         <td><a href="edicionEgreso/{{items.nEgreso}}" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a></td>
@@ -96,6 +103,28 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('cantidad_aftosa').addEventListener('input', actualizarTotalAftosa);
+
+    function actualizarTotalAftosa() {
+        const cantidadAftosa = document.getElementById('cantidad_aftosa').value || 1;
+
+        // Realiza la solicitud AJAX para obtener el valor unitario de Aftosa
+        fetch('/obtener_valor_dosis_aftosa/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.valor_dosis) {
+                    const totalAftosa = data.valor_dosis * cantidadAftosa;
+                    document.getElementById('total').value = totalAftosa.toFixed(2);
+                } else {
+                    alert("Error: " + data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+
 <script type="text/javascript">
     var verificarCedulaUrl = "{% url 'verificar_cedula' %}";
 </script>

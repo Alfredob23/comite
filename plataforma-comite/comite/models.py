@@ -10,11 +10,11 @@ class Usuarios(models.Model):
         texto = f"{self.cedula:} {self.nombre_completo}"
         return texto
 
-class Vacunas(models.Model):
+class Biologicos(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     valor_unitario = models.IntegerField()
-
+    
     def __str__(self):
         return self.nombre
 
@@ -53,17 +53,24 @@ class Egresos(models.Model):
 class Facturar(models.Model):
     nFactura = models.AutoField(primary_key=True)
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE,null=True)
-    vacunas = models.ForeignKey(Vacunas, on_delete=models.CASCADE,null=True)
-    cantidad_vacunas = models.IntegerField(default=0)
+    informacion_biologicos = models.ForeignKey(Biologicos, on_delete=models.CASCADE,null=True)
+    cantidad_aftosa = models.IntegerField(default=0)
+    cantidad_cepa19 = models.IntegerField(default=0)
+    biologico = models.CharField(max_length=20)
     lote = models.IntegerField(default=0)
-    laboratio = models.CharField(max_length=100)
-    valor_total = models.IntegerField(default=0,editable=False)
+    laboratorio = models.CharField(max_length=100)
+    valor_total = models.BigIntegerField(default=0,editable=False)
     fecha = models.DateTimeField(auto_now_add=True,editable=False)
     
-    def save(self, *args, **kwargs):
-        self.valor_total = self.cantidad_vacunas* self.vacunas.valor_unitario
+    def save(self, *args, **kwargs):     
+        primer_biologico = Biologicos.objects.first()
+        print(self.cantidad_aftosa)
+        print(primer_biologico.valor_unitario)
+        self.valor_total = int(self.cantidad_aftosa) * int(primer_biologico.valor_unitario)
+        print(self.valor_total)
         super().save(*args, **kwargs) 
          
     def __str__(self):
-        texto = f"{self.nFactura} {self.vacunas.nombre} {self.cantidad_vacunas}"
+        biologico1_nombre = self.biologico if self.biologico else "No asignado"
+        texto = f"Factura No: {self.nFactura} Biologico1: {biologico1_nombre}"
         return texto

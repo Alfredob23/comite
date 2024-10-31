@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import render,redirect
-from .models import Ingresos,Usuarios,Egresos,Vacunas,Facturar
+from .models import Ingresos,Usuarios,Egresos,Facturar
 from django.http import JsonResponse,HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -225,3 +225,23 @@ def facturar(request):
     for i in factura[::-1]:
         factura_invertida.append(i)
     return render(request,"facturar/facturas.html",{"facturas":factura_invertida})
+
+def registrarFactura(request):
+    cedula = request.POST['cedula']
+    nombre_completo = request.POST['nombre_completo']
+    direccion = request.POST['direccion']
+    biologico = request.POST['biologico']
+    cantidad_aftosa = request.POST['cantidad[]']
+    lote = request.POST['lote[]']
+    if cedula and nombre_completo and direccion:
+            usuario, created = Usuarios.objects.get_or_create(cedula=cedula, defaults={'nombre_completo': nombre_completo,'direccion': direccion})
+                    # Si el usuario fue creado correctamente, creamos el ingreso
+            if usuario:
+                Facturar.objects.create(usuario=usuario, cantidad_aftosa =cantidad_aftosa,lote = lote,biologico = biologico)
+                return redirect('/facturar/')
+    else:
+        return render(request, '/', {'error': 'Todos los campos son requeridos.'})
+    return render(request, '/facturar/')
+
+
+
