@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import render,redirect
-from .models import Ingresos,Usuarios,Egresos,Facturar
+from .models import Ingresos,Usuarios,Egresos,Facturar,Biologicos
 from django.http import JsonResponse,HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -221,10 +221,11 @@ def export_to_excel_egreso(request):
 
 def facturar(request):
     factura = Facturar.objects.all()
+    info = Biologicos.objects.all()
     factura_invertida = []
     for i in factura[::-1]:
         factura_invertida.append(i)
-    return render(request,"facturar/facturas.html",{"facturas":factura_invertida})
+    return render(request,"facturar/facturas.html",{"facturas":factura_invertida,"info":info})
 
 def registrarFactura(request):
     cedula = request.POST['cedula']

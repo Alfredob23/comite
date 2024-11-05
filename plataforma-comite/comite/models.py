@@ -12,11 +12,11 @@ class Usuarios(models.Model):
 
 class Biologicos(models.Model):
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
-    valor_unitario = models.IntegerField()
-    
+    descripcion = models.TextField(max_length=200)
+    valorUnidad = models.IntegerField()
     def __str__(self):
-        return self.nombre
+        return f"{self.valorUnidad}"
+
 
 class Ingresos(models.Model):
     nIngreso = models.AutoField(primary_key=True)
@@ -52,8 +52,8 @@ class Egresos(models.Model):
     
 class Facturar(models.Model):
     nFactura = models.AutoField(primary_key=True)
+    biologicosInformacion = models.ForeignKey(Biologicos, on_delete=models.CASCADE,null=True)
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE,null=True)
-    informacion_biologicos = models.ForeignKey(Biologicos, on_delete=models.CASCADE,null=True)
     cantidad_aftosa = models.IntegerField(default=0)
     cantidad_cepa19 = models.IntegerField(default=0)
     biologico = models.CharField(max_length=20)
@@ -64,10 +64,7 @@ class Facturar(models.Model):
     
     def save(self, *args, **kwargs):     
         primer_biologico = Biologicos.objects.first()
-        print(self.cantidad_aftosa)
-        print(primer_biologico.valor_unitario)
-        self.valor_total = int(self.cantidad_aftosa) * int(primer_biologico.valor_unitario)
-        print(self.valor_total)
+        self.valor_total = int(self.cantidad_aftosa) * int(primer_biologico.valorUnidad)
         super().save(*args, **kwargs) 
          
     def __str__(self):
