@@ -15,7 +15,7 @@ class Biologicos(models.Model):
     descripcion = models.TextField(max_length=200)
     valorUnidad = models.IntegerField()
     def __str__(self):
-        return f"{self.valorUnidad}"
+        return f"{self.nombre} Valor: {self.valorUnidad}"
 
 
 class Ingresos(models.Model):
@@ -63,9 +63,16 @@ class Facturar(models.Model):
     fecha = models.DateTimeField(auto_now_add=True,editable=False)
     
     def save(self, *args, **kwargs):     
-        primer_biologico = Biologicos.objects.first()
-        self.valor_total = int(self.cantidad_aftosa) * int(primer_biologico.valorUnidad)
-        super().save(*args, **kwargs) 
+        if not self.biologicosInformacion:
+            if self.biologico == 'Aftosa':
+                self.biologicosInformacion = Biologicos.objects.get(nombre='Aftosa')
+            elif self.biologico == 'Cepa19':
+                self.biologicosInformacion = Biologicos.objects.get(nombre='Cepa19')
+        
+        if self.biologicosInformacion:
+            self.valor_total = int(self.cantidad_aftosa) * int(self.biologicosInformacion.valorUnidad)
+        
+        super().save(*args, **kwargs)
          
     def __str__(self):
         biologico1_nombre = self.biologico if self.biologico else "No asignado"

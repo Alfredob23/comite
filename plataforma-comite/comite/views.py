@@ -234,7 +234,7 @@ def registrarFactura(request):
     biologico = request.POST['biologico']
     cantidad_aftosa = request.POST['cantidad[]']
     lote = request.POST['lote[]']
-    if cedula and nombre_completo and direccion:
+    if cedula and nombre_completo and direccion and biologico:
             usuario, created = Usuarios.objects.get_or_create(cedula=cedula, defaults={'nombre_completo': nombre_completo,'direccion': direccion})
                     # Si el usuario fue creado correctamente, creamos el ingreso
             if usuario:
