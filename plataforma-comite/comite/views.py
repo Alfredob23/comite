@@ -231,14 +231,31 @@ def registrarFactura(request):
     cedula = request.POST['cedula']
     nombre_completo = request.POST['nombre_completo']
     direccion = request.POST['direccion']
-    biologico = request.POST['biologico']
-    cantidad_aftosa = request.POST['cantidad[]']
-    lote = request.POST['lote[]']
+    biologico = request.POST.getlist('biologico[]')
+    lote = request.POST.getlist('lote[]')
+    cantidad = request.POST.getlist('cantidad[]')
+    cantidad_aftosa = 0
+    cantidad_cepa19 = 0
+    laboratorio = []
+    for l,b in zip(lote,biologico):  
+        if int(l) in range(200,351) and b =='Aftosa':
+            laboratorio.append('Limor')
+        elif int(l) in range(400,601) and b =='Aftosa':
+            laboratorio.append('Vecol')
+        elif int(l) > 800 and b =='Cepa19':
+            laboratorio.append('Vecol')
+
+                   
+    for b,c,l  in zip (biologico,cantidad,lote):     
+        if b == 'Aftosa':
+            cantidad_aftosa +=int(c)
+        elif b == 'Cepa19':
+            cantidad_cepa19 +=int(c)
     if cedula and nombre_completo and direccion and biologico:
             usuario, created = Usuarios.objects.get_or_create(cedula=cedula, defaults={'nombre_completo': nombre_completo,'direccion': direccion})
                     # Si el usuario fue creado correctamente, creamos el ingreso
             if usuario:
-                Facturar.objects.create(usuario=usuario, cantidad_aftosa =cantidad_aftosa,lote = lote,biologico = biologico)
+                Facturar.objects.create(usuario=usuario, cantidad_aftosa =cantidad_aftosa,cantidad_cepa19 =cantidad_cepa19,cantidad_total=cantidad,lote = lote,biologico = biologico,laboratorio=laboratorio)
                 return redirect('/facturar/')
     else:
         return render(request, '/', {'error': 'Todos los campos son requeridos.'})

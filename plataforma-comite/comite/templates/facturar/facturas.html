@@ -30,7 +30,7 @@
                     <div id="campo-principal" class="form-group" style="display: flex; gap: 10px; align-items: center;">
                         <div style="flex: 1;">
                             <label for="biologico">Biologico:</label>
-                            <select id="biologico" class="form-control" name="biologico">
+                            <select id="biologico" class="form-control" name="biologico[]">
                                 <option value="Aftosa">Aftosa</option>
                                 <option value="Cepa19">Cepa19</option>
                                 <option value="Rabia">Rabia</option>
@@ -89,7 +89,7 @@
                         <td>{{items.usuario.nombre_completo}}</td>
                         <td>{{items.biologico}}</td>
                         <td>{{items.cantidad_aftosa}}</td>
-                        <td>{{items.biologicosInformacion.valorUnidad}}</td>
+                        <td>{{items.infoAftosa.valorUnidad}}</td>
                         <td>{{items.valor_total}}</td>
                         <td>{{items.fecha|date:"d/m/Y"}}</td>
                         <td><a href="edicionEgreso/{{items.nEgreso}}" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a></td>

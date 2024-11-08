@@ -52,29 +52,30 @@ class Egresos(models.Model):
     
 class Facturar(models.Model):
     nFactura = models.AutoField(primary_key=True)
-    biologicosInformacion = models.ForeignKey(Biologicos, on_delete=models.CASCADE,null=True)
+    infoAftosa = models.ForeignKey(Biologicos, on_delete=models.CASCADE,null=True,related_name='info_aftosa')
+    infoCepa = models.ForeignKey(Biologicos, on_delete=models.CASCADE,null=True,related_name='info_cepa')
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE,null=True)
     cantidad_aftosa = models.IntegerField(default=0)
     cantidad_cepa19 = models.IntegerField(default=0)
-    biologico = models.CharField(max_length=20)
-    lote = models.IntegerField(default=0)
-    laboratorio = models.CharField(max_length=100)
+    cantidad_total = models.JSONField()
+    biologico = models.JSONField()
+    lote = models.JSONField()
+    laboratorio = models.JSONField()
     valor_total = models.BigIntegerField(default=0,editable=False)
     fecha = models.DateTimeField(auto_now_add=True,editable=False)
     
+
     def save(self, *args, **kwargs):     
-        if not self.biologicosInformacion:
-            if self.biologico == 'Aftosa':
-                self.biologicosInformacion = Biologicos.objects.get(nombre='Aftosa')
-            elif self.biologico == 'Cepa19':
-                self.biologicosInformacion = Biologicos.objects.get(nombre='Cepa19')
-        
-        if self.biologicosInformacion:
-            self.valor_total = int(self.cantidad_aftosa) * int(self.biologicosInformacion.valorUnidad)
-        
+        self.infoAftosa = Biologicos.objects.get(nombre='Aftosa')
+        self.infoCepa = Biologicos.objects.get(nombre='Cepa19')
+        if self.infoAftosa:
+            self.valor_total = int(self.cantidad_aftosa) * int(self.infoAftosa.valorUnidad)
+
         super().save(*args, **kwargs)
          
     def __str__(self):
         biologico1_nombre = self.biologico if self.biologico else "No asignado"
         texto = f"Factura No: {self.nFactura} Biologico1: {biologico1_nombre}"
         return texto
+    
+    

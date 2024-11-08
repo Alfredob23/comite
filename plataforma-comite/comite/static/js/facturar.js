@@ -1,4 +1,7 @@
+let count = 0;
+
 function addCantidadLoteFields() {
+    count++;
     const contenedorAdicional = document.getElementById('campos-adicionales');
 
     // Crear un nuevo div contenedor para los nuevos campos
@@ -16,7 +19,8 @@ function addCantidadLoteFields() {
     nuevoBiologicoLabel.textContent = 'Biológico:';
     const nuevoBiologicoSelect = document.createElement('select');
     nuevoBiologicoSelect.classList.add('form-control');
-    nuevoBiologicoSelect.name = 'biologico[]'; // Array de "tipo_pago" para múltiples valores
+    nuevoBiologicoSelect.name = 'biologico[]'; // Array de "biologico" para múltiples valores
+    nuevoBiologicoSelect.id = `biologico${count}`; // Id único
     nuevoBiologicoSelect.required = true; // Hacer que sea obligatorio
 
     // Opciones del select
@@ -41,6 +45,7 @@ function addCantidadLoteFields() {
     nuevaCantidadInput.type = 'number';
     nuevaCantidadInput.classList.add('form-control');
     nuevaCantidadInput.name = 'cantidad[]'; // Array de "cantidad" para múltiples valores
+    nuevaCantidadInput.id = `cantidad${count}`; // Id único
     nuevaCantidadInput.maxLength = 20;
     
     // Agregar el label y el input de cantidad al div de cantidad
@@ -56,6 +61,7 @@ function addCantidadLoteFields() {
     nuevoLoteInput.type = 'text';
     nuevoLoteInput.classList.add('form-control');
     nuevoLoteInput.name = 'lote[]'; // Array de "lote" para múltiples valores
+    nuevoLoteInput.id = `lote${count}`; // Id único
     nuevoLoteInput.maxLength = 20;
     
     // Agregar el label y el input de lote al div de lote
@@ -70,4 +76,3 @@ function addCantidadLoteFields() {
     // Agregar el nuevo div al contenedor de campos adicionales
     contenedorAdicional.appendChild(nuevoDiv);
 }
-
