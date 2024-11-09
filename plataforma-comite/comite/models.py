@@ -61,15 +61,27 @@ class Facturar(models.Model):
     biologico = models.JSONField()
     lote = models.JSONField()
     laboratorio = models.JSONField()
-    valor_total = models.BigIntegerField(default=0,editable=False)
+    valor_total = models.BigIntegerField(default=0)
     fecha = models.DateTimeField(auto_now_add=True,editable=False)
     
 
     def save(self, *args, **kwargs):     
+        
+        #Obtengo la informacion de los Biologicos para posteriormente hacer un calculo del valor total
         self.infoAftosa = Biologicos.objects.get(nombre='Aftosa')
         self.infoCepa = Biologicos.objects.get(nombre='Cepa19')
         if self.infoAftosa:
             self.valor_total = int(self.cantidad_aftosa) * int(self.infoAftosa.valorUnidad)
+        
+        # recorro el campo Biologico y Cantidad total, para que en el momento que se realice un cambio 
+        # en los valores de cantidad total, se actualice la cantidad de biologicos y por ende el valor total    
+        self.cantidad_aftosa = 0
+        self.cantidad_cepa19 = 0
+        for b,c in zip(self.biologico,self.cantidad_total):
+            if b=='Aftosa':
+                self.cantidad_aftosa +=c
+            elif b == 'Cepa19':
+                self.cantidad_cepa19 +=c            
 
         super().save(*args, **kwargs)
          

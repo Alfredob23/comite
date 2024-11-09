@@ -87,8 +87,16 @@
                         <td>{{items.nFactura}}</td>
                         <td>{{items.usuario.cedula}}</td>
                         <td>{{items.usuario.nombre_completo}}</td>
-                        <td>{{items.biologico}}</td>
-                        <td>{{items.cantidad_aftosa}}</td>
+                        <td>
+                            {% for biologico in items.biologico %}
+                                {{ biologico }}<br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for dosis in items.cantidad_total %}
+                                {{ dosis }}<br>
+                            {% endfor %}
+                        </td>
                         <td>{{items.infoAftosa.valorUnidad}}</td>
                         <td>{{items.valor_total}}</td>
                         <td>{{items.fecha|date:"d/m/Y"}}</td>
@@ -104,26 +112,6 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('cantidad_aftosa').addEventListener('input', actualizarTotalAftosa);
-
-    function actualizarTotalAftosa() {
-        const cantidadAftosa = document.getElementById('cantidad_aftosa').value || 1;
-
-        // Realiza la solicitud AJAX para obtener el valor unitario de Aftosa
-        fetch('/obtener_valor_dosis_aftosa/')
-            .then(response => response.json())
-            .then(data => {
-                if (data.valor_dosis) {
-                    const totalAftosa = data.valor_dosis * cantidadAftosa;
-                    document.getElementById('total').value = totalAftosa.toFixed(2);
-                } else {
-                    alert("Error: " + data.error);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
-</script>
 
 <script type="text/javascript">
     var verificarCedulaUrl = "{% url 'verificar_cedula' %}";
