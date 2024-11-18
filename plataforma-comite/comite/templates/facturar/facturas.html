@@ -1,9 +1,7 @@
 {% extends "base.html" %}
-
 {% block title %} Comite de Ganaderos {% endblock %}
 {% load static %}
 {% block body %}
-
 
 <div class="row">
     <div class=" col-sm-12 col-md-6 col-lg-3 col-xl-3">
@@ -12,25 +10,28 @@
             <div class="card-body">
                 <form action="/registrarFactura/" id="registro-form" method="POST">
                     {% csrf_token %}
+                    
+                    <!-- Datos del cliente -->
                     <div class="form-group">
-                        <label>Cedula:</label>
-                        <input  class="form-control" type="text" id="cedula" name="cedula"   maxlength="20" required >
+                        <label>Cédula:</label>
+                        <input class="form-control" type="text" id="cedula" name="cedula" maxlength="20" required>
                     </div>
-
+            
                     <div class="form-group">
                         <label>Nombre y apellidos:</label>
-                        <input  class="form-control" type="text" id="nombre_completo" name="nombre_completo"   maxlength="100" required >
+                        <input class="form-control" type="text" id="nombre_completo" name="nombre_completo" maxlength="100" required>
                     </div>
-                    
+            
                     <div class="form-group">
-                        <label>Direccion o Municipio:</label>
-                        <input  class="form-control" type="text" id="direccion" name="direccion"   maxlength="100" required>
+                        <label>Dirección o Municipio:</label>
+                        <input class="form-control" type="text" id="direccion" name="direccion" maxlength="100" required>
                     </div>
-                
+            
+                    <!-- Campos de biológico, cantidad y lote -->
                     <div id="campo-principal" class="form-group" style="display: flex; gap: 10px; align-items: center;">
                         <div style="flex: 1;">
-                            <label for="biologico">Biologico:</label>
-                            <select id="biologico" class="form-control" name="biologico[]">
+                            <label for="biologico">Biológico:</label>
+                            <select id="biologico" class="form-control" name="biologico[]" onchange="updateTotal()">
                                 <option value="Aftosa">Aftosa</option>
                                 <option value="Cepa19">Cepa19</option>
                                 <option value="Rabia">Rabia</option>
@@ -38,26 +39,30 @@
                         </div>
                         <div style="flex: 1;">
                             <label for="cantidad">Cantidad:</label>
-                            <input class="form-control" type="number" id="cantidad" name="cantidad[]" maxlength="20" required>
+                            <input class="form-control" type="number" id="cantidad" name="cantidad[]" maxlength="20" required oninput="updateTotal()">
                         </div>
                         <div style="flex: 1;">
                             <label for="lote">Lote:</label>
-                            <input class="form-control" type="number" id="lote" name="lote[]" maxlength="20" required>
+                            <input class="form-control" type="text" id="lote" name="lote[]" maxlength="20" required>
                         </div>
                     </div>
-                    
-                    <div id="campos-adicionales"> </div>
-
-                    <button type="button" onclick="addCantidadLoteFields()" style="margin-top: 12px;"><i class="fa-solid fa-plus"></i></button>
-                    <div class="form-group" class="form-control">
+            
+                    <div id="campos-adicionales"></div>
+            
+                    <button type="button" onclick="addCantidadLoteFields()" style="margin-top: 12px;">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+            
+                    <!-- Campo de total -->
+                    <div class="form-group">
                         <label>Total:</label>
-                        <input class="form-control" type="number" id="total" name="total" maxlength="20" required>
+                        <input class="form-control" type="number" id="total" name="total" readonly>
                     </div>
-                
+            
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary w-100 text-white">Guardar</button>
                     </div>
-                </form>   
+                </form>
             </div>
         </div> 
     </div>
@@ -74,7 +79,7 @@
                         <th>Cedula</th>
                         <th>Nombre</th>
                         <th>Biologico</th>
-                        <th>No Dosis</th>
+                        <th>N Aftosa</th>
                         <th>V. Unitario</th>
                         <th>V. Total</th>
                         <th>Fecha</th>
@@ -87,16 +92,8 @@
                         <td>{{items.nFactura}}</td>
                         <td>{{items.usuario.cedula}}</td>
                         <td>{{items.usuario.nombre_completo}}</td>
-                        <td>
-                            {% for biologico in items.biologico %}
-                                {{ biologico }}<br>
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for dosis in items.cantidad_total %}
-                                {{ dosis }}<br>
-                            {% endfor %}
-                        </td>
+                        <td>{{items.biologico.0}}</td>
+                        <td>{{items.cantidad_aftosa }}</td>
                         <td>{{items.infoAftosa.valorUnidad}}</td>
                         <td>{{items.valor_total}}</td>
                         <td>{{items.fecha|date:"d/m/Y"}}</td>
@@ -106,12 +103,13 @@
                         <td><a href="imprimirEgreso/{{items.nEgreso}}" onclick="abrirPopup(event, 'imprimirEgreso/{{items.nEgreso}}', 'Mi ventana emergente', 800, 1000)"  class="btn btn-dark"><i class="fa-solid fa-print"></i></i></i></a></td>
                     </tr>
                     {% endfor%}
-                </tbody>
+
+                </tbody>       
+
             </table>
         </div>
     </div>
 </div>
-
 
 <script type="text/javascript">
     var verificarCedulaUrl = "{% url 'verificar_cedula' %}";

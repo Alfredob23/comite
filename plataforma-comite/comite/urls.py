@@ -20,5 +20,6 @@ urlpatterns = [
     path('egresos/imprimirEgreso/<int:nEgreso>', views.imprimirEgreso),
     path('egresos/descargarExcelEgresos/', views.export_to_excel_egreso),
     path('facturar/',views.facturar),
-    path('registrarFactura/',views.registrarFactura)
+    path('registrarFactura/',views.registrarFactura),
+    path('obtener_precio_biologico/', views.obtener_precio_biologico, name='obtener_precio_biologico'),
 ]

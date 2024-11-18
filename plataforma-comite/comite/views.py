@@ -221,11 +221,11 @@ def export_to_excel_egreso(request):
 
 def facturar(request):
     factura = Facturar.objects.all()
-    info = Biologicos.objects.all()
+    precios_biologicos = {biologico.nombre: biologico.valorUnidad for biologico in Biologicos.objects.all()}
     factura_invertida = []
     for i in factura[::-1]:
         factura_invertida.append(i)
-    return render(request,"facturar/facturas.html",{"facturas":factura_invertida,"info":info})
+    return render(request,"facturar/facturas.html",{"facturas":factura_invertida,"precios_biologicos": precios_biologicos})
 
 def registrarFactura(request):
     cedula = request.POST['cedula']
@@ -265,4 +265,16 @@ def registrarFactura(request):
     return render(request, '/facturar/')
 
 
+
+def obtener_precio_biologico(request):
+    # Obtener el nombre del biológico desde la solicitud AJAX
+    nombre_biologico = request.GET.get('biologico', '')
+
+    # Buscar el precio del biológico en el modelo
+    try:
+        biologico = Biologicos.objects.get(nombre=nombre_biologico)
+        precio = biologico.valorUnidad
+        return JsonResponse({'precio': precio})
+    except Biologicos.DoesNotExist:
+        return JsonResponse({'error': 'Biológico no encontrado'}, status=404)
 
