@@ -22,4 +22,5 @@ urlpatterns = [
     path('facturar/',views.facturar),
     path('registrarFactura/',views.registrarFactura),
     path('obtener_precio_biologico/', views.obtener_precio_biologico, name='obtener_precio_biologico'),
+    path('facturar/edicionFactura/<nFactura>',views.edicionFactura),
 ]

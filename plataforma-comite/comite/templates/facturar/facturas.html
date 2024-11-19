@@ -31,7 +31,7 @@
                     <div id="campo-principal" class="form-group" style="display: flex; gap: 10px; align-items: center;">
                         <div style="flex: 1;">
                             <label for="biologico">Biológico:</label>
-                            <select id="biologico" class="form-control" name="biologico[]" onchange="updateTotal()">
+                            <select id="biologico" class="form-control" name="biologico[]"  onchange="updateTotal()">
                                 <option value="Aftosa">Aftosa</option>
                                 <option value="Cepa19">Cepa19</option>
                                 <option value="Rabia">Rabia</option>
@@ -97,7 +97,7 @@
                         <td>{{items.infoAftosa.valorUnidad}}</td>
                         <td>{{items.valor_total}}</td>
                         <td>{{items.fecha|date:"d/m/Y"}}</td>
-                        <td><a href="edicionEgreso/{{items.nEgreso}}" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a></td>
+                        <td><a href="edicionFactura/{{items.nFactura}}" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a></td>
                         <td><a href="eliminacionEgreso/{{items.nEgreso}}" class="btn btn-danger btnEliminacion"> <i class="fa-solid fa-trash-can"></i></a></td>
                         <td><a href="detalleEgreso/{{items.nEgreso}}" class="btn btn-success"><i class="fa-solid fa-magnifying-glass"></i></a></td>
                         <td><a href="imprimirEgreso/{{items.nEgreso}}" onclick="abrirPopup(event, 'imprimirEgreso/{{items.nEgreso}}', 'Mi ventana emergente', 800, 1000)"  class="btn btn-dark"><i class="fa-solid fa-print"></i></i></i></a></td>

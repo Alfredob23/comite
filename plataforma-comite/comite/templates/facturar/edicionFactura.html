@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %} Comite de Ganaderos {% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h2 style="text-align: center;">Editar Factura</h2>   
+        <div class="card">
+            <div class="card-body">
+                <form action="/registrarFactura/" id="registro-form" method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- Datos del cliente -->
+                    <div class="form-group">
+                        <label>Cédula:</label>
+                        <input class="form-control" type="text" id="cedula" name="cedula" value="{{ factura.usuario.cedula }}" maxlength="20" required>
+                    </div>
+            
+                    <div class="form-group">
+                        <label>Nombre y apellidos:</label>
+                        <input class="form-control" type="text" id="nombre_completo" name="nombre_completo" value="{{ factura.usuario.nombre_completo }}" maxlength="100" required>
+                    </div>
+            
+                    <div class="form-group">
+                        <label>Dirección o Municipio:</label>
+                        <input class="form-control" type="text" id="direccion" name="direccion" value="{{ factura.usuario.direccion }}" maxlength="100" required>
+                    </div>
+                    
+                    {% for biologico, c, lote in factura_pares %}
+                    <div id="campo-principal" class="form-group" style="display: flex; gap: 10px; align-items: center;">
+                        <div style="flex: 1;">
+                            <label for="tipo_pago">Biológico:</label>
+                            <select id="biologico" class="form-control" name="biologico[]" onchange="updateTotal()">
+                                <option value="Aftosa" {% if biologico == 'Aftosa' %}selected{% endif %}>Aftosa</option>
+                                <option value="Cepa19" {% if biologico == 'Cepa19' %}selected{% endif %}>Cepa19</option>
+                                <option value="Rabia" {% if biologico == 'Rabia' %}selected{% endif %}>Rabia</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="cantidad">Cantidad:</label>
+                            <input class="form-control" type="number" id="cantidad" name="cantidad[]" value="{{c}}" maxlength="20" required oninput="updateTotal()">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="lote">Lote:</label>
+                            <input class="form-control" type="text" id="lote" name="lote[]" value="{{lote}}" maxlength="20" required>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <div id="campos-adicionales"></div>
+                    <button type="button" onclick="addCantidadLoteFields()" style="margin-top: 12px;">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+            
+                    <!-- Campo de total -->
+                    <div class="form-group">
+                        <label>Total:</label>
+                        <input class="form-control" type="number" id="total" name="total" value="{{ factura.valor_total }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary w-100 text-white">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div> 
+    </div>
+{% endblock %}
+

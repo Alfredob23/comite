@@ -278,3 +278,13 @@ def obtener_precio_biologico(request):
     except Biologicos.DoesNotExist:
         return JsonResponse({'error': 'Biológico no encontrado'}, status=404)
 
+def edicionFactura(request,nFactura):
+    factura = Facturar.objects.get(nFactura = nFactura)
+    biologicos = list(factura.biologico)
+    cantidad_total = list(factura.cantidad_total)
+    lote = list(factura.lote)
+    factura_pares = zip(biologicos, cantidad_total, lote)
+    context = {
+    "factura_pares": factura_pares,"factura":factura,
+    }
+    return render(request, 'facturar/edicionFactura.html',context)
