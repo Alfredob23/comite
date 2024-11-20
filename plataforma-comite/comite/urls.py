@@ -23,4 +23,7 @@ urlpatterns = [
     path('registrarFactura/',views.registrarFactura),
     path('obtener_precio_biologico/', views.obtener_precio_biologico, name='obtener_precio_biologico'),
     path('facturar/edicionFactura/<nFactura>',views.edicionFactura),
+    path('facturar/editarFactura/<int:nFactura>/',views.editarFactura),
+    path('facturar/eliminacionFactura/<nFactura>',views.eliminacionFactura),
+    path('facturar/detalleFactura/<int:nFactura>/',views.detalleFactura),
 ]

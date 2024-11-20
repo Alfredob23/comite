@@ -265,7 +265,6 @@ def registrarFactura(request):
     return render(request, '/facturar/')
 
 
-
 def obtener_precio_biologico(request):
     # Obtener el nombre del biológico desde la solicitud AJAX
     nombre_biologico = request.GET.get('biologico', '')
@@ -288,3 +287,57 @@ def edicionFactura(request,nFactura):
     "factura_pares": factura_pares,"factura":factura,
     }
     return render(request, 'facturar/edicionFactura.html',context)
+
+
+def editarFactura(request,nFactura):
+    cedula = request.POST['cedula']
+    nombre_completo = request.POST['nombre_completo']
+    direccion = request.POST['direccion']
+    biologico = request.POST.getlist('biologico[]')
+    lote = request.POST.getlist('lote[]')
+    cantidad = request.POST.getlist('cantidad[]')
+    cantidad_int = [int(elemento) for elemento in cantidad]
+    cantidad_aftosa = 0
+    cantidad_cepa19 = 0
+    laboratorio = []
+    
+    #En esta parte recorro los diferentes numeros de lote y de acuerdo al rango se encuentre
+    #le asigno un nombre.
+    for l,b in zip(lote,biologico):  
+        if int(l) in range(200,351) and b =='Aftosa':
+            laboratorio.append('Limor')
+        elif int(l) in range(400,601) and b =='Aftosa':
+            laboratorio.append('Vecol')
+        elif int(l) > 800 and b =='Cepa19':
+            laboratorio.append('Vecol')
+        else:
+            laboratorio.append('null')
+                 
+    for b,c in zip (biologico,cantidad):     
+        if b == 'Aftosa':
+            cantidad_aftosa +=int(c)
+        elif b == 'Cepa19':
+            cantidad_cepa19 +=int(c)
+
+    factura = Facturar.objects.get(nFactura=nFactura)
+    factura.cedula = cedula
+    factura.nombre_completo = nombre_completo
+    factura.direccion = direccion
+    factura.biologico = biologico
+    factura.lote = lote
+    factura.cantidad_total = cantidad_int
+    factura.cantidad_aftosa = cantidad_aftosa
+    factura.cantidad_cepa19 = cantidad_cepa19
+    factura.laboratorio = laboratorio
+    factura.save()    
+    return redirect('/facturar')
+
+def eliminacionFactura(request,nFactura):
+    factura = Facturar.objects.get(nFactura=nFactura)
+    factura.delete()
+    return redirect('/facturar')
+
+
+def detalleFactura(request,nFactura):
+    factura = Facturar.objects.get(nFactura=nFactura)
+    return render(request,"facturar/detalleFactura.html",{"factura":factura})
