@@ -346,3 +346,37 @@ def detalleFactura(request,nFactura):
 def imprimirFactura(request,nFactura):
     factura = Facturar.objects.get(nFactura=nFactura)
     return render(request,"facturar/ticketFactura.html",{"factura":factura})
+
+
+def export_to_excel_facturas(request):
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = 'Facturas'
+    
+        
+    sheet.append(['No Factura', 'Nombre', 'Cedula','C. Aftosa', 'C. Cepa19', 'Valor total','Fecha'])
+    for cell in sheet[1]:
+        cell.font = Font(bold=True) 
+    
+    
+    
+    facturas = Facturar.objects.all()
+    
+    for factura in facturas:
+        if factura.fecha:
+            fecha = factura.fecha.replace(tzinfo=None)
+        else:
+            fecha= None
+        sheet.append([factura.nFactura, factura.usuario.nombre_completo, factura.usuario.cedula,factura.cantidad_aftosa ,factura.cantidad_cepa19 ,factura.valor_total,fecha])
+        
+    for column in sheet.columns:
+        max_length = max(len(str(cell.value)) for cell in column if cell.value)  # Encuentra el texto más largo
+        adjusted_width = max_length + 2  
+        sheet.column_dimensions[column[0].column_letter].width = adjusted_width
+    
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="Facturas.xlsx"'     
+
+    workbook.save(response)
+
+    return response

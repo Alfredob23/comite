@@ -27,4 +27,5 @@ urlpatterns = [
     path('facturar/eliminacionFactura/<nFactura>',views.eliminacionFactura),
     path('facturar/detalleFactura/<int:nFactura>/',views.detalleFactura),
     path('facturar/imprimirFactura/<int:nFactura>', views.imprimirFactura),
+    path('facturar/descargarExcelFacturas/', views.export_to_excel_facturas),
 ]
