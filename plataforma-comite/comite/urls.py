@@ -26,4 +26,5 @@ urlpatterns = [
     path('facturar/editarFactura/<int:nFactura>/',views.editarFactura),
     path('facturar/eliminacionFactura/<nFactura>',views.eliminacionFactura),
     path('facturar/detalleFactura/<int:nFactura>/',views.detalleFactura),
+    path('facturar/imprimirFactura/<int:nFactura>', views.imprimirFactura),
 ]

@@ -341,3 +341,8 @@ def eliminacionFactura(request,nFactura):
 def detalleFactura(request,nFactura):
     factura = Facturar.objects.get(nFactura=nFactura)
     return render(request,"facturar/detalleFactura.html",{"factura":factura})
+
+
+def imprimirFactura(request,nFactura):
+    factura = Facturar.objects.get(nFactura=nFactura)
+    return render(request,"facturar/ticketFactura.html",{"factura":factura})

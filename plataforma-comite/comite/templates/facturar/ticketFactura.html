@@ -17,42 +17,43 @@
             <h1>COMUGASAN</h1>
             <p class="matricula">Número de Matrícula: 123456789</p>
             <p>SAN JUAN NEPOMUCENO</p>
-            <p>65653</p>
-            <p>{{egreso.nEgreso}}</p>
+            <p>Calle 18 No 15-33</p>
+            <p>Factura No.{{factura.nFactura}}</p>
         </div>
 
         <div class="footer">
             <div class="row">
-                <span class="label">Nº Egreso:</span>
-                <span class="value">{{egreso.nEgreso }}</span>
-            </div>
-            <div class="row">
-                <span class="label">Tipo de Pago:</span>
-                <span class="value">{{ egreso.tipo_pago }}</span>
-            </div>
-            <div class="row">
-                <span class="label">Valor:</span>
-                <span class="value">{{ egreso.valorEgreso }}</span>
+                <span class="label">Nº Factura:</span>
+                <span class="value">{{factura.nFactura }}</span>
             </div>
             <div class="row">
                 <span class="label">Concepto:</span>
-                <span class="value">{{ egreso.concepto }}</span>
+                <span class="value">Venta de Vacunas</span>
             </div>
-            <div class="row"></div>
-                <span class="label">Concepto:</span>
-                <span class="value">{{ egreso.concepto }}</span>
+            <div class="row">
+                <span class="label">Cantidad Aftosa:</span>
+                <span class="value">{{ factura.cantidad_aftosa}}</span>
             </div>
+            <div class="row">
+                <span class="label">Cantidad Cepa19:</span>
+                <span class="value">{{ factura.cantidad_cepa19}}</span>
+            </div>
+            <div class="row">
+                <span class="label">Total a pagar:</span>
+                <span class="value">{{ factura.valor_total}}</span>
+            </div>
+
             <div class="row">
                 <span class="label">Recibe:</span>
-                <span class="value">{{ egreso.recibe }}</span>
+                <span class="value">{{ factura.usuario.nombre_completo }}</span>
             </div>
             <div class="row">
-                <span class="label">Revisa:</span>
-                <span class="value">{{ egreso.revisado }}</span>
+                <span class="label">Cedula:</span>
+                <span class="value">{{ factura.usuario.cedula }}</span>
             </div>
             <div class="row">
                 <span class="label">Fecha:</span>
-                <span class="value">{{ egreso.fecha }}</span>
+                <span class="value">{{ factura.fecha }}</span>
             </div>
         </div>
     </div>
