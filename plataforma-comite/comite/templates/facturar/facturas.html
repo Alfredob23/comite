@@ -83,6 +83,7 @@
                         <th>V. Unitario</th>
                         <th>V. Total</th>
                         <th>Fecha</th>
+                        <th>Estado</th>
                         <th colspan="4">Opciones</th>
                     </tr>
                 </thead>
@@ -97,6 +98,7 @@
                         <td>{{items.infoAftosa.valorUnidad}}</td>
                         <td>{{items.valor_total}}</td>
                         <td>{{items.fecha|date:"d/m/Y"}}</td>
+                        <td>{{items.estatus}}</td>
                         <td><a href="edicionFactura/{{items.nFactura}}" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a></td>
                         <td><a href="eliminacionFactura/{{items.nFactura}}" class="btn btn-danger btnEliminacion"> <i class="fa-solid fa-trash-can"></i></a></td>
                         <td><a href="detalleFactura/{{items.nFactura}}" class="btn btn-success"><i class="fa-solid fa-magnifying-glass"></i></a></td>

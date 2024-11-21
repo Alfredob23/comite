@@ -51,6 +51,11 @@ class Egresos(models.Model):
     
     
 class Facturar(models.Model):
+    ESTATUS_CHOICES = [
+        ('aprobado', 'Aprobado'),
+        ('pendiente', 'Pendiente'),
+        ('rechazado', 'Rechazado'),
+    ]
     nFactura = models.AutoField(primary_key=True)
     infoAftosa = models.ForeignKey(Biologicos, on_delete=models.CASCADE,null=True,related_name='info_aftosa')
     infoCepa = models.ForeignKey(Biologicos, on_delete=models.CASCADE,null=True,related_name='info_cepa')
@@ -63,6 +68,11 @@ class Facturar(models.Model):
     laboratorio = models.JSONField()
     valor_total = models.BigIntegerField(default=0)
     fecha = models.DateTimeField(auto_now_add=True,editable=False)
+    estatus = models.CharField(
+        max_length=20,
+        choices=ESTATUS_CHOICES,
+        default='pendiente', 
+    )
     
 
     def save(self, *args, **kwargs):     
