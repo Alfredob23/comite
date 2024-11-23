@@ -20,16 +20,25 @@ def home(request):
     return render(request,"ingresos/ingresos.html",{"ingresos":ingresos_invertidos,"usuarios":usuarios})
 
 def registrarIngreso(request):
+    factura_ingreso = request.POST['factura']
     cedula = request.POST['cedula']
     nombre_completo = request.POST['nombre_completo']
     direccion = request.POST['direccion']
     tipo_pago = request.POST['tipo_pago']
     valorIngreso = request.POST['valorIngreso']
     concepto = request.POST['concepto']
+    factura = ''
+    if factura_ingreso:
+        factura = Facturar.objects.get(nFactura=factura_ingreso)
+        factura.valor_pagado= int(valorIngreso)
+        factura.save()
     if cedula and nombre_completo and direccion:
         usuario, created = Usuarios.objects.get_or_create(cedula=cedula, defaults={'nombre_completo': nombre_completo,'direccion': direccion})
                 # Si el usuario fue creado correctamente, creamos el ingreso
-        if usuario:
+        if usuario  and factura:
+            Ingresos.objects.create(usuario=usuario, tipo_pago=tipo_pago,valorIngreso=valorIngreso,concepto=concepto,facturas=factura)
+            return redirect('/')
+        else:
             Ingresos.objects.create(usuario=usuario, tipo_pago=tipo_pago,valorIngreso=valorIngreso,concepto=concepto)
             return redirect('/')
     else:
@@ -45,6 +54,7 @@ def eliminacionIngreso(request,nIngreso):
 
 def edicionIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
+    
     return render(request,"ingresos/edicionIngresos.html",{"ingreso":ingreso})
 
 
@@ -55,13 +65,19 @@ def detalleIngreso(request,nIngreso):
 
 
 def editarIngreso(request,nIngreso):
+    factura_ingreso = request.POST['factura']
     pago = request.POST['tipo_pago']
     valor =request.POST['valorIngreso']
     concepto =request.POST['concepto']   
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     ingreso.tipo_pago = pago
-    ingreso.valorIngreso = valor
+    ingreso.valorIngreso = int(valor)
     ingreso.concepto = concepto
+    factura = ''
+    if factura_ingreso:
+        factura = Facturar.objects.get(nFactura=factura_ingreso)
+        factura.valor_pagado= int(valor)
+        factura.save()
     ingreso.save()
     return redirect('/')
 
@@ -370,7 +386,7 @@ def export_to_excel_facturas(request):
         sheet.append([factura.nFactura, factura.usuario.nombre_completo, factura.usuario.cedula,factura.cantidad_aftosa ,factura.cantidad_cepa19 ,factura.valor_total,fecha])
         
     for column in sheet.columns:
-        max_length = max(len(str(cell.value)) for cell in column if cell.value)  # Encuentra el texto más largo
+        max_length = max(len(str(cell.value)) for cell in column if cell.value) 
         adjusted_width = max_length + 2  
         sheet.column_dimensions[column[0].column_letter].width = adjusted_width
     
@@ -380,3 +396,22 @@ def export_to_excel_facturas(request):
     workbook.save(response)
 
     return response
+
+
+def get_factura_data(request):
+    if request.method == 'GET':
+        factura_number = request.GET.get('factura', None)
+        if factura_number:
+            try:
+                factura = Facturar.objects.get(nFactura=factura_number)
+                response_data = {
+                    'cedula': factura.usuario.cedula, 
+                    'nombre_completo': factura.usuario.nombre_completo,  
+                    'direccion': factura.usuario.direccion,
+                    'valorIngreso': factura.valor_pendiente,
+                }
+                return JsonResponse({'success': True, 'data': response_data})
+            except Facturar.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Factura no encontrada'})
+        return JsonResponse({'success': False, 'error': 'Número de factura no proporcionado'})
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})

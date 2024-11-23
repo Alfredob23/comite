@@ -23,9 +23,10 @@ urlpatterns = [
     path('registrarFactura/',views.registrarFactura),
     path('obtener_precio_biologico/', views.obtener_precio_biologico, name='obtener_precio_biologico'),
     path('facturar/edicionFactura/<nFactura>',views.edicionFactura),
-    path('facturar/editarFactura/<int:nFactura>/',views.editarFactura),
+    path('facturar/editarFactura/<str:nFactura>/',views.editarFactura),
     path('facturar/eliminacionFactura/<nFactura>',views.eliminacionFactura),
-    path('facturar/detalleFactura/<int:nFactura>/',views.detalleFactura),
-    path('facturar/imprimirFactura/<int:nFactura>', views.imprimirFactura),
+    path('facturar/detalleFactura/<nFactura>/',views.detalleFactura),
+    path('facturar/imprimirFactura/<nFactura>', views.imprimirFactura),
     path('facturar/descargarExcelFacturas/', views.export_to_excel_facturas),
+    path('api/get-factura-data/', views.get_factura_data, name='get_factura_data'),
 ]
