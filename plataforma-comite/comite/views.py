@@ -30,8 +30,6 @@ def registrarIngreso(request):
     factura = ''
     if factura_ingreso:
         factura = Facturar.objects.get(nFactura=factura_ingreso)
-        factura.valor_pagado= int(valorIngreso)
-        factura.save()
     if cedula and nombre_completo and direccion:
         usuario, created = Usuarios.objects.get_or_create(cedula=cedula, defaults={'nombre_completo': nombre_completo,'direccion': direccion})
                 # Si el usuario fue creado correctamente, creamos el ingreso

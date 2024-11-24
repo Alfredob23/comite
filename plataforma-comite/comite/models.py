@@ -31,7 +31,7 @@ class Ingresos(models.Model):
     
     def save(self, *args, **kwargs): 
         factura  = Facturar.objects.get(nFactura=self.facturas.nFactura)
-        factura.valor_pagado += self.valorIngreso
+        factura.valor_pagado += int(self.valorIngreso)
         factura.save()
         super().save(*args, **kwargs)
     
