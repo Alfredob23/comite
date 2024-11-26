@@ -72,10 +72,15 @@ def editarIngreso(request,nIngreso):
     ingreso.valorIngreso = int(valor)
     ingreso.concepto = concepto
     factura = ''
+    total = int(valor)
+    ingresos = Ingresos.objects.all()
+    for n in ingresos:
+        if n.facturas.nFactura == factura_ingreso:
+            total += n.valorIngreso
     if factura_ingreso:
         factura = Facturar.objects.get(nFactura=factura_ingreso)
-        factura.valor_pagado= int(valor)
-        factura.save()
+        factura.valor_pagado= total
+    factura.save()
     ingreso.save()
     return redirect('/')
 

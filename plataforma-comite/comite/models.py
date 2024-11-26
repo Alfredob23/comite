@@ -30,10 +30,18 @@ class Ingresos(models.Model):
     concepto = models.CharField(max_length=200)
     
     def save(self, *args, **kwargs): 
-        factura  = Facturar.objects.get(nFactura=self.facturas.nFactura)
-        factura.valor_pagado += int(self.valorIngreso)
-        factura.save()
-        super().save(*args, **kwargs)
+        total =  0
+        if self.facturas:
+            factura = Facturar.objects.get(nFactura=self.facturas.nFactura)
+            factura.valor_pagado += int(self.valorIngreso)
+            factura.save()
+            ingreso = Ingresos.objects.all()
+            for n in ingreso:
+                total += n.facturas.valor_pagado
+        else:
+            pass
+        print(total)
+        super().save(*args, **kwargs) 
     
     def __str__(self):
         biologico1_nombre = self.biologico if self.biologico else "No asignado"
