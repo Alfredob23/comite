@@ -63,7 +63,6 @@ def detalleIngreso(request,nIngreso):
 
 
 def editarIngreso(request,nIngreso):
-    factura_ingreso = request.POST['factura']
     pago = request.POST['tipo_pago']
     valor =request.POST['valorIngreso']
     concepto =request.POST['concepto']   
@@ -71,19 +70,8 @@ def editarIngreso(request,nIngreso):
     ingreso.tipo_pago = pago
     ingreso.valorIngreso = int(valor)
     ingreso.concepto = concepto
-    factura = ''
-    total = int(valor)
-    ingresos = Ingresos.objects.all()
-    for n in ingresos:
-        if n.facturas.nFactura == factura_ingreso:
-            total += n.valorIngreso
-    if factura_ingreso:
-        factura = Facturar.objects.get(nFactura=factura_ingreso)
-        factura.valor_pagado= total
-    factura.save()
     ingreso.save()
     return redirect('/')
-
 
 def verificar_cedula(request):
     cedula = request.GET.get('cedula', None)

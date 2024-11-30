@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 
 # Create your models here.
 class Usuarios(models.Model):
@@ -17,8 +18,6 @@ class Biologicos(models.Model):
     def __str__(self):
         return f"{self.nombre} Valor: {self.valorUnidad}"
 
-
-
 class Ingresos(models.Model):
     nIngreso = models.AutoField(primary_key=True)
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE,null=True)
@@ -30,18 +29,15 @@ class Ingresos(models.Model):
     concepto = models.CharField(max_length=200)
     
     def save(self, *args, **kwargs): 
-        total =  0
+        super().save(*args, **kwargs) 
+        
         if self.facturas:
             factura = Facturar.objects.get(nFactura=self.facturas.nFactura)
-            factura.valor_pagado += int(self.valorIngreso)
-            factura.save()
-            ingreso = Ingresos.objects.all()
-            for n in ingreso:
-                total += n.facturas.valor_pagado
-        else:
-            pass
-        print(total)
-        super().save(*args, **kwargs) 
+            n_factura_especifica = factura.nFactura
+            factura.valor_pagado = Ingresos.objects.filter(facturas__nFactura=n_factura_especifica).aggregate(total_pagado=Sum('valorIngreso'))['total_pagado']  
+            factura.save()  
+            print(f'Del Modelo: {factura.valor_pagado}')
+        
     
     def __str__(self):
         biologico1_nombre = self.biologico if self.biologico else "No asignado"
@@ -51,6 +47,8 @@ class Ingresos(models.Model):
     def __str__(self):
         texto = f"{self.nIngreso} {self.valorIngreso} {self.concepto}"
         return texto
+    
+    
     
 class Egresos(models.Model):
     nEgreso = models.AutoField(primary_key=True)
@@ -90,10 +88,9 @@ class Facturar(models.Model):
     valor_pendiente = models.IntegerField(default=0)
     fecha = models.DateTimeField(auto_now_add=True,editable=False)
     estatus = models.CharField(max_length=20,default='PENDIENTE', )
-    
-    
+       
     def save(self, *args, **kwargs):   
-         
+        print (f'Factura {self.valor_pagado}') 
         #Obtengo la informacion de los Biologicos para posteriormente hacer un calculo del valor total
         self.infoCepa = Biologicos.objects.get(nombre='Cepa19')
         self.infoAftosa = Biologicos.objects.get(nombre='Aftosa')
