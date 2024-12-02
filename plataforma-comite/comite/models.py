@@ -35,10 +35,16 @@ class Ingresos(models.Model):
             factura = Facturar.objects.get(nFactura=self.facturas.nFactura)
             n_factura_especifica = factura.nFactura
             factura.valor_pagado = Ingresos.objects.filter(facturas__nFactura=n_factura_especifica).aggregate(total_pagado=Sum('valorIngreso'))['total_pagado']  
-            factura.save()  
-            print(f'Del Modelo: {factura.valor_pagado}')
+            factura.save()
         
-    
+    def delete(self, *args, **kwargs):
+        factura = self.facturas
+        super().delete(*args, **kwargs)
+        if factura:
+            factura.valor_pagado = Ingresos.objects.filter(facturas=factura).aggregate(Sum('valorIngreso'))['valorIngreso__sum'] or 0
+            factura.valor_pendiente = factura.valor_total - factura.valor_pagado
+            factura.save()
+            
     def __str__(self):
         biologico1_nombre = self.biologico if self.biologico else "No asignado"
         texto = f"Factura No: {self.nFactura} Biologico1: {biologico1_nombre}"
@@ -90,7 +96,6 @@ class Facturar(models.Model):
     estatus = models.CharField(max_length=20,default='PENDIENTE', )
        
     def save(self, *args, **kwargs):   
-        print (f'Factura {self.valor_pagado}') 
         #Obtengo la informacion de los Biologicos para posteriormente hacer un calculo del valor total
         self.infoCepa = Biologicos.objects.get(nombre='Cepa19')
         self.infoAftosa = Biologicos.objects.get(nombre='Aftosa')

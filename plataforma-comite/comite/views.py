@@ -46,6 +46,7 @@ def registrarIngreso(request):
 
 def eliminacionIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
+    ingreso.facturas
     ingreso.delete()
     return redirect('/')
 
