@@ -9,9 +9,16 @@ from django.template.loader import render_to_string
 import io
 import openpyxl
 from openpyxl.styles import Font
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
 
-# INGRESOS
+
 def home(request):
+    return render(request,"home.html")
+# INGRESOS
+
+
+def ingresos(request):
     ingresos = Ingresos.objects.all()
     usuarios = Usuarios.objects.all()
     ingresos_invertidos = []
@@ -35,10 +42,10 @@ def registrarIngreso(request):
                 # Si el usuario fue creado correctamente, creamos el ingreso
         if usuario  and factura:
             Ingresos.objects.create(usuario=usuario, tipo_pago=tipo_pago,valorIngreso=valorIngreso,concepto=concepto,facturas=factura)
-            return redirect('/')
+            return redirect('/ingresos')
         else:
             Ingresos.objects.create(usuario=usuario, tipo_pago=tipo_pago,valorIngreso=valorIngreso,concepto=concepto)
-            return redirect('/')
+            return redirect('/ingresos')
     else:
         return render(request, '/', {'error': 'Todos los campos son requeridos.'})
     return render(request, '/')
@@ -48,7 +55,7 @@ def eliminacionIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     ingreso.facturas
     ingreso.delete()
-    return redirect('/')
+    return redirect('/ingresos')
 
 
 def edicionIngreso(request,nIngreso):

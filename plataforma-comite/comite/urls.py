@@ -1,13 +1,17 @@
 from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView
 from . import views
 
 urlpatterns = [
-    path('', views.home),
+    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('', views.home, name='home'),
+    path('ingresos/',views.ingresos),
     path('registrarIngreso/',views.registrarIngreso),
-    path('edicionIngreso/<nIngreso>',views.edicionIngreso),
-    path('eliminacionIngreso/<nIngreso>',views.eliminacionIngreso),
-    path('editarIngreso/<int:nIngreso>/',views.editarIngreso),
-    path('detalleIngreso/<int:nIngreso>/',views.detalleIngreso),
+    path('ingresos/edicionIngreso/<nIngreso>',views.edicionIngreso),
+    path('ingresos/eliminacionIngreso/<nIngreso>',views.eliminacionIngreso),
+    path('ingresos/editarIngreso/<int:nIngreso>/',views.editarIngreso),
+    path('ingresos/detalleIngreso/<int:nIngreso>/',views.detalleIngreso),
     path('verificar-cedula/', views.verificar_cedula, name='verificar_cedula'),
     path('detallePDF/<int:nIngreso>', views.detallePDF,),
     path('descargarExcelIngresos/',views.export_to_excel,name='exportar a excel'),
