@@ -33,6 +33,17 @@
                 <a class="nav-link" href="/facturar">FACTURAR</a>
               </li>
             </ul>
+            <div class="d-flex align-items-center">
+              {% if user.is_authenticated %}
+                  <span class="me-3">{{ user.username }}</span>
+                  <form action="{% url 'logout' %}" method="post" class="d-inline">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
+                  </form>
+              {% else %}
+                  <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">Iniciar sesión</a>
+              {% endif %}
+          </div>
           </div>
         </div>
       </nav>

@@ -9,15 +9,14 @@ from django.template.loader import render_to_string
 import io
 import openpyxl
 from openpyxl.styles import Font
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
     return render(request,"home.html")
 # INGRESOS
 
-
+@login_required
 def ingresos(request):
     ingresos = Ingresos.objects.all()
     usuarios = Usuarios.objects.all()
