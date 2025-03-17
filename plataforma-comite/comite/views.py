@@ -3,7 +3,6 @@ from django.shortcuts import render,redirect
 from .models import Ingresos,Usuarios,Egresos,Facturar,Biologicos
 from django.http import JsonResponse,HttpResponse
 from django.template.loader import get_template
-from xhtml2pdf import pisa
 from io import BytesIO
 from django.template.loader import render_to_string
 import io
@@ -11,9 +10,11 @@ import openpyxl
 from openpyxl.styles import Font
 from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def home(request):
     return render(request,"home.html")
+
+
 # INGRESOS
 
 @login_required
@@ -25,6 +26,7 @@ def ingresos(request):
         ingresos_invertidos.append(i)
     return render(request,"ingresos/ingresos.html",{"ingresos":ingresos_invertidos,"usuarios":usuarios})
 
+@login_required
 def registrarIngreso(request):
     factura_ingreso = request.POST['factura']
     cedula = request.POST['cedula']
@@ -49,26 +51,26 @@ def registrarIngreso(request):
         return render(request, '/', {'error': 'Todos los campos son requeridos.'})
     return render(request, '/')
 
-
+@login_required
 def eliminacionIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     ingreso.facturas
     ingreso.delete()
     return redirect('/ingresos')
 
-
+@login_required
 def edicionIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     
     return render(request,"ingresos/edicionIngresos.html",{"ingreso":ingreso})
 
 
-
+@login_required
 def detalleIngreso(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     return render(request,"ingresos/detalleIngresos.html",{"ingreso":ingreso})
 
-
+@login_required
 def editarIngreso(request,nIngreso):
     pago = request.POST['tipo_pago']
     valor =request.POST['valorIngreso']
@@ -80,6 +82,7 @@ def editarIngreso(request,nIngreso):
     ingreso.save()
     return redirect('/')
 
+@login_required
 def verificar_cedula(request):
     cedula = request.GET.get('cedula', None)
     if cedula:
@@ -98,11 +101,14 @@ def verificar_cedula(request):
     
     return JsonResponse(data)
 
+
+@login_required
 def detallePDF(request,nIngreso):
     ingreso = Ingresos.objects.get(nIngreso=nIngreso)
     return render(request,"ingresos/ticketIngresos.html",{"ingreso":ingreso})
 
 
+@login_required
 def export_to_excel(request):
     workbook = openpyxl.Workbook()
     sheet = workbook.active
@@ -137,6 +143,7 @@ def export_to_excel(request):
 ######EGRESOS######
 
 
+@login_required
 def egresos(request):
     egresos = Egresos.objects.all()
     egresos_invertidos = []
@@ -144,7 +151,7 @@ def egresos(request):
         egresos_invertidos.append(i)
     return render(request,"egresos/egresos.html",{"egresos":egresos_invertidos})
 
-
+@login_required
 def registrarEgreso(request):
     tipo_pago = request.POST['tipo_pago']
     valorEgreso = request.POST['valorEgreso']
@@ -158,24 +165,26 @@ def registrarEgreso(request):
     return redirect('/egresos')
 
 
-
+@login_required
 def edicionEgreso(request,nEgreso):
     egreso = Egresos.objects.get(nEgreso=nEgreso)
     return render(request,"egresos/edicionEgresos.html",{"egreso":egreso})
 
 
-
+@login_required
 def eliminacionEgreso(request,nEgreso):
     egreso = Egresos.objects.get(nEgreso=nEgreso)
     egreso.delete()
     return redirect('/egresos')
 
 
+@login_required
 def detalleEgreso(request,nEgreso):
     egreso = Egresos.objects.get(nEgreso=nEgreso)
     return render(request,"egresos/detalleEgreso.html",{"egreso":egreso})
 
 
+@login_required
 def editarEgreso(request,nEgreso):
     tipo_pago = request.POST['tipo_pago']
     valorEgreso = request.POST['valorEgreso']
@@ -194,11 +203,13 @@ def editarEgreso(request,nEgreso):
     egreso.save()    
     return redirect('/egresos')
 
+
+@login_required
 def imprimirEgreso(request,nEgreso):
     egreso = Egresos.objects.get(nEgreso=nEgreso)
     return render(request,"egresos/ticketEgresos.html",{"egreso":egreso})
 
-
+@login_required
 def export_to_excel_egreso(request):
     workbook = openpyxl.Workbook()
     sheet = workbook.active
@@ -233,6 +244,7 @@ def export_to_excel_egreso(request):
 #####FACTURAR#####
 
 
+@login_required
 def facturar(request):
     factura = Facturar.objects.all()
     precios_biologicos = {biologico.nombre: biologico.valorUnidad for biologico in Biologicos.objects.all()}
@@ -241,6 +253,8 @@ def facturar(request):
         factura_invertida.append(i)
     return render(request,"facturar/facturas.html",{"facturas":factura_invertida,"precios_biologicos": precios_biologicos})
 
+
+@login_required
 def registrarFactura(request):
     cedula = request.POST['cedula']
     nombre_completo = request.POST['nombre_completo']
@@ -279,6 +293,7 @@ def registrarFactura(request):
     return render(request, '/facturar/')
 
 
+@login_required
 def obtener_precio_biologico(request):
     # Obtener el nombre del biológico desde la solicitud AJAX
     nombre_biologico = request.GET.get('biologico', '')
@@ -291,6 +306,8 @@ def obtener_precio_biologico(request):
     except Biologicos.DoesNotExist:
         return JsonResponse({'error': 'Biológico no encontrado'}, status=404)
 
+
+@login_required
 def edicionFactura(request,nFactura):
     factura = Facturar.objects.get(nFactura = nFactura)
     biologicos = list(factura.biologico)
@@ -303,6 +320,7 @@ def edicionFactura(request,nFactura):
     return render(request, 'facturar/edicionFactura.html',context)
 
 
+@login_required
 def editarFactura(request,nFactura):
     cedula = request.POST['cedula']
     nombre_completo = request.POST['nombre_completo']
@@ -316,7 +334,7 @@ def editarFactura(request,nFactura):
     laboratorio = []
     
     #En esta parte recorro los diferentes numeros de lote y de acuerdo al rango se encuentre
-    #le asigno un nombre.
+    #le asigno un nombre del laborario.
     for l,b in zip(lote,biologico):  
         if int(l) in range(200,351) and b =='Aftosa':
             laboratorio.append('Limor')
@@ -346,22 +364,27 @@ def editarFactura(request,nFactura):
     factura.save()    
     return redirect('/facturar')
 
+
+@login_required
 def eliminacionFactura(request,nFactura):
     factura = Facturar.objects.get(nFactura=nFactura)
     factura.delete()
     return redirect('/facturar')
 
 
+@login_required
 def detalleFactura(request,nFactura):
     factura = Facturar.objects.get(nFactura=nFactura)
     return render(request,"facturar/detalleFactura.html",{"factura":factura})
 
 
+@login_required
 def imprimirFactura(request,nFactura):
     factura = Facturar.objects.get(nFactura=nFactura)
     return render(request,"facturar/ticketFactura.html",{"factura":factura})
 
 
+@login_required
 def export_to_excel_facturas(request):
     workbook = openpyxl.Workbook()
     sheet = workbook.active
@@ -395,7 +418,7 @@ def export_to_excel_facturas(request):
 
     return response
 
-
+@login_required
 def get_factura_data(request):
     if request.method == 'GET':
         factura_number = request.GET.get('factura', None)
