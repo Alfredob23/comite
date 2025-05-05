@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import render,redirect
-from .models import Ingresos,Usuarios,Egresos,Facturar,Biologicos
+from .models import Ingresos,Usuarios,Egresos,Facturar,Biologicos,Mensajes
 from django.http import JsonResponse,HttpResponse
 from django.template.loader import get_template
 from io import BytesIO
@@ -9,14 +9,21 @@ import io
 import openpyxl
 from openpyxl.styles import Font
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.contrib import messages
 
-@login_required
+
 def home(request):
     return render(request,"home.html")
 
 
-# INGRESOS
 
+@login_required
+def dashboard(request):
+    return render(request,"dashboard.html")
+
+ 
+# INGRESOS
 @login_required
 def ingresos(request):
     ingresos = Ingresos.objects.all()
@@ -436,3 +443,65 @@ def get_factura_data(request):
                 return JsonResponse({'success': False, 'error': 'Factura no encontrada'})
         return JsonResponse({'success': False, 'error': 'Número de factura no proporcionado'})
     return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+###MENSAJES#####
+
+def mensajes(request):
+    nombre = request.POST['nombre']
+    correo = request.POST['correo']
+    telefono= request.POST['telefono']
+    mensaje = request.POST['mensaje']
+    Mensajes.objects.create(nombre=nombre, correo =correo,telefono =telefono,mensaje=mensaje)
+    return redirect('/')
+@login_required
+def ver_mensajes(request):
+    mensajes = Mensajes.objects.all().order_by('-id')
+    return render(request, "mensajes/mensajes.html", {
+        "mensajes": mensajes,
+    })
+@login_required
+def detalle_mensaje(request,id):
+    mensaje = Mensajes.objects.get(id=id)
+    if not mensaje.leido:
+        mensaje.leido = True
+        mensaje.save()
+    return render(request,"mensajes/detalleMensaje.html",{"mensaje":mensaje})
+@login_required
+def eliminar_mensaje(request,id):
+    mensaje = Mensajes.objects.get(id=id)
+    mensaje.delete()
+    return redirect("/bandeja-mensajes/")
+
+@login_required
+def responder_mensaje(request,id):
+    mensaje = Mensajes.objects.get(id=id)
+    return render(request,"mensajes/responderMensaje.html",{"mensaje":mensaje})
+
+@login_required
+def enviar_correo(request):
+    if request.method == 'POST':
+        correo = request.POST.get('correo')
+        asunto = request.POST.get('asunto')
+        mensaje = request.POST.get('mensaje')
+
+        try:
+            send_mail(
+                subject=asunto,
+                message=mensaje,
+                from_email=None,
+                recipient_list=[correo],
+                fail_silently=False,
+            )
+
+            messages.success(request, 'Correo enviado con éxito')
+        except Exception as e:
+            messages.error(request, f'Error al enviar el correo: {str(e)}')
+
+        return render(request, "mensajes/responderMensaje.html", {
+            "mensaje": {
+                "correo": correo,
+                "asunto": asunto,
+            }
+        })
+
+    return render(request, "mensajes/mensajes.html")

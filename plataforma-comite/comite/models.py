@@ -53,8 +53,7 @@ class Ingresos(models.Model):
     def __str__(self):
         texto = f"{self.nIngreso} {self.valorIngreso} {self.concepto}"
         return texto
-    
-    
+
     
 class Egresos(models.Model):
     nEgreso = models.AutoField(primary_key=True)
@@ -72,8 +71,6 @@ class Egresos(models.Model):
     def __str__(self):
         texto = f"{self.nEgreso} {self.valorEgreso} {self.concepto}"
         return texto
-    
-    
     
     
     
@@ -144,3 +141,13 @@ class Facturar(models.Model):
         return texto
     
     
+class Mensajes(models.Model):
+    nombre = models.CharField(max_length=100)
+    correo = models.EmailField()
+    telefono = models.CharField(max_length=15)
+    mensaje = models.TextField()
+    leido = models.BooleanField(default=False)
+    
+    def __str__(self):
+        texto = f"{self.nombre} {self.correo}"
+        return texto

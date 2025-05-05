@@ -21,7 +21,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">INICIO</a>
+                <a class="nav-link active" aria-current="page" href="/dashboard/">INICIO</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/ingresos">INGRESOS</a>
@@ -32,24 +32,42 @@
               <li class="nav-item">
                 <a class="nav-link" href="/facturar">FACTURAR</a>
               </li>
+
             </ul>
             <div class="d-flex align-items-center">
               {% if user.is_authenticated %}
-                  <span class="me-3">{{ user.username }}</span>
-                  <form action="{% url 'logout' %}" method="post" class="d-inline">
+                <a href="/bandeja-mensajes/" class="btn btn-outline-secondary btn-sm position-relative me-2">
+                  <i class="fas fa-envelope"></i>
+                  {% if mensajes_no_leidos > 0 %}
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          {{ mensajes_no_leidos }}
+                      </span>
+                  {% endif %}
+                </a>
+                  <div class="dropdown">
+                      <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                          {{ user.username }}
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                          <li><a class="dropdown-item" href="#">Perfil</a></li>
+                          <li><a class="dropdown-item" href="#">Configuración</a></li>
+                      </ul>
+                  </div>
+          
+                  <form action="{% url 'logout' %}" method="post" class="ms-3">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
                   </form>
+          
               {% else %}
                   <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">Iniciar sesión</a>
               {% endif %}
           </div>
-          </div>
         </div>
+        
       </nav>
       <div class="container">
         {% block body%}
-
 
         {% endblock%}
     </div>

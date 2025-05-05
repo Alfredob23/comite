@@ -6,6 +6,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('', views.home, name='home'),
+    path('dashboard/', views.dashboard, name='dasboard'),
     path('ingresos/',views.ingresos),
     path('registrarIngreso/',views.registrarIngreso),
     path('ingresos/edicionIngreso/<nIngreso>',views.edicionIngreso),
@@ -33,4 +34,11 @@ urlpatterns = [
     path('facturar/imprimirFactura/<nFactura>', views.imprimirFactura),
     path('facturar/descargarExcelFacturas/', views.export_to_excel_facturas),
     path('api/get-factura-data/', views.get_factura_data, name='get_factura_data'),
+    path('mensajes/',views.mensajes),
+    path('bandeja-mensajes/',views.ver_mensajes),
+    path('bandeja-mensajes/detalleMensaje/<int:id>/',views.detalle_mensaje),
+    path('eliminar-mensaje/<int:id>/',views.eliminar_mensaje),
+    path('bandeja-mensajes/responderMensaje/<int:id>/',views.responder_mensaje),
+    path('enviar/', views.enviar_correo, name='enviar_correo'),
+    
 ]
