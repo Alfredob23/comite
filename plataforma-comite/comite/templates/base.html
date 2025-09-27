@@ -44,14 +44,10 @@
                       </span>
                   {% endif %}
                 </a>
-                  <div class="dropdown">
+                  <div class="">
                       <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                           {{ user.username }}
                       </button>
-                      <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                          <li><a class="dropdown-item" href="#">Perfil</a></li>
-                          <li><a class="dropdown-item" href="#">Configuración</a></li>
-                      </ul>
                   </div>
           
                   <form action="{% url 'logout' %}" method="post" class="ms-3">

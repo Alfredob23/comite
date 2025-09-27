@@ -3,5 +3,36 @@
 {% block title %} Comite de Ganaderos {% endblock %}
 
 {% block body %}
-Bienvenidos Rafael Santos 
+<div class="container mt-5">
+    <h2 class="mb-4">Resumen General</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Ingresos</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_ingresos }} registros</h5>
+                    <p class="card-text">Total: ${{ suma_ingresos }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Egresos</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_egresos }} registros</h5>
+                    <p class="card-text">Total: ${{ suma_egresos }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Facturas</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_facturas }} registros</h5>
+                    <p class="card-text">Total: ${{ suma_facturas }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

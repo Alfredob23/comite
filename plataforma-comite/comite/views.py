@@ -11,7 +11,7 @@ from openpyxl.styles import Font
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.contrib import messages
-
+from django.db.models import Sum
 
 def home(request):
     return render(request,"home.html")
@@ -20,8 +20,20 @@ def home(request):
 
 @login_required
 def dashboard(request):
-    return render(request,"dashboard.html")
-
+    total_ingresos = Ingresos.objects.count()
+    total_egresos = Egresos.objects.count()
+    total_facturas = Facturar.objects.count()
+    suma_ingresos = int(Ingresos.objects.aggregate(total=Sum('valorIngreso'))['total'] or 0)
+    suma_egresos = int(Egresos.objects.aggregate(total=Sum('valorEgreso'))['total'] or 0)
+    suma_facturas = int(Facturar.objects.aggregate(total=Sum('valor_total'))['total'] or 0)
+    return render(request, "dashboard.html", {
+        "total_ingresos": total_ingresos,
+        "total_egresos": total_egresos,
+        "total_facturas": total_facturas,
+        "suma_ingresos": suma_ingresos,
+        "suma_egresos": suma_egresos,
+        "suma_facturas": suma_facturas,
+    })
  
 # INGRESOS
 @login_required
@@ -505,3 +517,4 @@ def enviar_correo(request):
         })
 
     return render(request, "mensajes/mensajes.html")
+
