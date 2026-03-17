@@ -8,6 +8,9 @@ from django.template.loader import render_to_string
 import io
 import openpyxl
 from openpyxl.styles import Font
+from django.db.models import Sum
+from datetime import datetime, timedelta
+import json
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -26,6 +29,29 @@ def dashboard(request):
     suma_ingresos = int(Ingresos.objects.aggregate(total=Sum('valorIngreso'))['total'] or 0)
     suma_egresos = int(Egresos.objects.aggregate(total=Sum('valorEgreso'))['total'] or 0)
     suma_facturas = int(Facturar.objects.aggregate(total=Sum('valor_total'))['total'] or 0)
+    
+    meses = []
+    ingresos_mes = []
+    facturas_mes = []
+    egresos_mes = []
+    
+    for i in range(5, -1, -1):
+        fecha = datetime.now() - timedelta(days=i*30)
+        mes_nombre = fecha.strftime('%b')
+        meses.append(mes_nombre)
+        
+        inicio_mes = fecha.replace(day=1)
+        fin_mes = (inicio_mes + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+        
+        ing = Ingresos.objects.filter(fecha__gte=inicio_mes, fecha__lte=fin_mes).aggregate(total=Sum('valorIngreso'))['total'] or 0
+        ingresos_mes.append(int(ing))
+        
+        fac = Facturar.objects.filter(fecha__gte=inicio_mes, fecha__lte=fin_mes).aggregate(total=Sum('valor_total'))['total'] or 0
+        facturas_mes.append(int(fac))
+        
+        egr = Egresos.objects.filter(fecha__gte=inicio_mes, fecha__lte=fin_mes).aggregate(total=Sum('valorEgreso'))['total'] or 0
+        egresos_mes.append(int(egr))
+    
     return render(request, "dashboard.html", {
         "total_ingresos": total_ingresos,
         "total_egresos": total_egresos,
@@ -33,6 +59,10 @@ def dashboard(request):
         "suma_ingresos": suma_ingresos,
         "suma_egresos": suma_egresos,
         "suma_facturas": suma_facturas,
+        "meses": json.dumps(meses),
+        "ingresos_mes": json.dumps(ingresos_mes),
+        "facturas_mes": json.dumps(facturas_mes),
+        "egresos_mes": json.dumps(egresos_mes),
     })
  
 # INGRESOS

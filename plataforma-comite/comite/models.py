@@ -49,10 +49,6 @@ class Ingresos(models.Model):
         biologico1_nombre = self.biologico if self.biologico else "No asignado"
         texto = f"Factura No: {self.nFactura} Biologico1: {biologico1_nombre}"
         return texto
-    
-    def __str__(self):
-        texto = f"{self.nIngreso} {self.valorIngreso} {self.concepto}"
-        return texto
 
     
 class Egresos(models.Model):
@@ -76,6 +72,11 @@ class Egresos(models.Model):
     
     
 class Facturar(models.Model):
+    class EstatusChoices(models.TextChoices):
+        PENDIENTE = 'PENDIENTE', 'Pendiente'
+        ABONADO = 'ABONADO', 'Abonado'
+        PAGADO = 'PAGADO', 'Pagado'
+
     nFactura = models.CharField(max_length=10, primary_key=True, editable=False)
     infoAftosa = models.ForeignKey('Biologicos', on_delete=models.CASCADE, null=True, related_name='info_aftosa')
     infoCepa = models.ForeignKey('Biologicos', on_delete=models.CASCADE, null=True, related_name='info_cepa')
@@ -90,7 +91,7 @@ class Facturar(models.Model):
     valor_pagado = models.IntegerField(default=0)
     valor_pendiente = models.IntegerField(default=0)
     fecha = models.DateTimeField(auto_now_add=True, editable=False)
-    estatus = models.CharField(max_length=20, default='PENDIENTE')
+    estatus = models.CharField(max_length=20, choices=EstatusChoices.choices, default=EstatusChoices.PENDIENTE)
 
     def save(self, *args, **kwargs):
         # Obtengo la informacion de los Biologicos para posteriormente hacer un calculo del valor total
@@ -116,11 +117,11 @@ class Facturar(models.Model):
         if int(self.valor_pendiente) <= 0:
             self.valor_pendiente = 0
         if int(self.valor_pagado) >= self.valor_total:
-            self.estatus = 'PAGADO'
+            self.estatus = self.EstatusChoices.PAGADO
         elif int(self.valor_pagado) > 0:
-            self.estatus = 'ABONADO'
+            self.estatus = self.EstatusChoices.ABONADO
         else:
-            self.estatus = 'PENDIENTE'
+            self.estatus = self.EstatusChoices.PENDIENTE
 
         # Generación robusta del nFactura
         if not self.nFactura:
